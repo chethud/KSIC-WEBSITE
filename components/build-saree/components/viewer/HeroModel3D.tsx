@@ -3,9 +3,14 @@ import { useGLTF, useTexture } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import {
+  BLOUSES,
+  BORDER_COLORS,
+  COLORS,
   HERO_MODEL_PATH,
   REGION_MASK_PATHS,
+  ZARIS,
 } from '../../data/catalog';
+import { borderTextureOf } from '../../data/borders';
 import { useCustomizerStore } from '../../store/customizerStore';
 import {
   installSareeDebugGlobals,
@@ -15,11 +20,7 @@ import {
 import { RegionAssignSession, clampBrushRadius } from '../../engine/regionAssign';
 import { registerRegionAssignApi } from '../../engine/regionAssignBridge';
 import { isSareeBaseMesh } from '../../engine/sareeBaseMaterial';
-import {
-  applyShadeFactor,
-  resolveMaterials,
-  shadeDepth,
-} from '../../engine/materialEngine';
+import { applyShadeFactor, shadeDepth } from '../../engine/materialEngine';
 import { FixedDrapeStandIn } from './FixedDrapeStandIn';
 
 const _worldNormal = new THREE.Vector3();
@@ -78,23 +79,81 @@ function collectPaintHits(
   return out.length ? out : [primary];
 }
 
-/** Push the current colour / border / pallu / blouse / zari onto the live saree. */
+function hexForColorId(id: string | null): string | null {
+  if (id == null) return null;
+  return COLORS.find((c) => c.id === id)?.hex ?? null;
+}
+
+function shadeHex(hex: string, factor: number): string {
+  const n = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, Math.round(((n >> 16) & 255) * factor)));
+  const g = Math.min(255, Math.max(0, Math.round(((n >> 8) & 255) * factor)));
+  const b = Math.min(255, Math.max(0, Math.round((n & 255) * factor)));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+function blouseHex(blouseId: string | null, sareeHex: string): string | null {
+  if (!blouseId) return null;
+  const item = BLOUSES.find((b) => b.id === blouseId);
+  if (!item) return null;
+  if (item.material === 'fixed' && item.hex) return item.hex;
+  if (item.material === 'matching') return sareeHex;
+  if (item.material === 'darker') return shadeHex(sareeHex, 0.72);
+  if (item.material === 'lighter') return shadeHex(sareeHex, 1.18);
+  if (item.material === 'contrast') return shadeHex(sareeHex, 0.55);
+  return sareeHex;
+}
+
+/**
+ * Same dress update as “make your own saree”:
+ * silk colour only, blouse follows it, woven border stays until that step.
+ */
 function renderConfigurationOnModel(controller: SareeMaterialController): void {
   const state = useCustomizerStore.getState();
-  const mats = resolveMaterials(state);
-  const shaded = state.color
-    ? applyShadeFactor(mats.sareeHex, shadeDepth(state.shade))
-    : null;
-  controller.applySareeColor(shaded);
-  controller.applyPalluColor(state.pallu ? shaded : null);
-  controller.applyBlouseColor(state.blouse ? mats.blouseHex : null);
-  controller.applyZariColor(state.zari ? mats.zariHex : null);
-  if (state.border) {
-    controller.applyBorderDesign(state.border, mats.borderHex, mats.zariHex);
+  const base = hexForColorId(state.color);
+  const sareeHex = base ? applyShadeFactor(base, shadeDepth(state.shade)) : null;
+  controller.applySareeColor(sareeHex, false);
+
+  if (sareeHex) {
+    const nextBlouse =
+      !state.blouse || state.blouse === 'matching'
+        ? sareeHex
+        : blouseHex(state.blouse, sareeHex);
+    controller.applyBlouseColor(nextBlouse, false);
   } else {
-    controller.applyBorderDesign(null, null, null);
-    controller.applyPalluBorderColor(null);
+    controller.applyBlouseColor(null, false);
   }
+
+  const onBorder =
+    state.step === 'border' ||
+    state.step === 'pallu' ||
+    state.step === 'zari' ||
+    state.step === 'finish';
+  if (onBorder && state.border) {
+    const hex = BORDER_COLORS.find((c) => c.id === state.borderColor)?.hex ?? '#B8963E';
+    const zariFromStep =
+      state.step === 'zari' || state.step === 'finish'
+        ? ZARIS.find((x) => x.id === state.zari)?.hex
+        : null;
+    const zariAccent =
+      zariFromStep && zariFromStep.toLowerCase() !== hex.toLowerCase()
+        ? zariFromStep
+        : state.borderColor === 'pure-gold'
+          ? '#FFF3B0'
+          : '#E8C547';
+    controller.applyBorderDesign(borderTextureOf(state.border), hex, zariAccent, false);
+    controller.applyPalluBorderColor(hex, false);
+  } else {
+    controller.applyBorderDesign(null, null, null, false);
+    controller.applyPalluBorderColor(null, false);
+  }
+
+  const onZari = state.step === 'zari' || state.step === 'finish';
+  controller.applyZariColor(
+    onZari ? (ZARIS.find((x) => x.id === state.zari)?.hex ?? null) : null,
+    false,
+  );
+  controller.commitAppearance();
 }
 
 /**
@@ -109,6 +168,7 @@ function HeroGlb({ url }: { url: string }) {
   const controllerRef = useRef<SareeMaterialController | null>(null);
   const assignRef = useRef<RegionAssignSession | null>(null);
   const paintingRef = useRef(false);
+  const authoredKey = useRef<string | null>(null);
   const mapOnRef = useRef(false);
   const rebuildRafRef = useRef(0);
   const baseMasksRef = useRef<Parameters<typeof RegionAssignSession.create>[0] | null>(
@@ -117,6 +177,7 @@ function HeroGlb({ url }: { url: string }) {
 
   const color = useCustomizerStore((s) => s.color);
   const shade = useCustomizerStore((s) => s.shade);
+  const step = useCustomizerStore((s) => s.step);
   const border = useCustomizerStore((s) => s.border);
   const borderColor = useCustomizerStore((s) => s.borderColor);
   const pallu = useCustomizerStore((s) => s.pallu);
@@ -177,18 +238,12 @@ function HeroGlb({ url }: { url: string }) {
     });
     controllerRef.current = controller;
     registerMaterialController(controller);
-    controller.inspectModel();
 
     void session.hydratePersisted().then((ok) => {
-      if (ok) {
-        controller.setStrictAssignMasks(true);
-        controller.refreshAfterMaskEdit();
-        invalidate();
-      }
+      if (!ok) return;
+      controller.setStrictAssignMasks(true, false);
+      invalidate();
     });
-
-    renderConfigurationOnModel(controller);
-    invalidate();
 
     registerRegionAssignApi({
       reset: () => {
@@ -267,10 +322,25 @@ function HeroGlb({ url }: { url: string }) {
   useEffect(() => {
     const controller = controllerRef.current;
     if (!controller) return;
+    const key = JSON.stringify({
+      color,
+      shade,
+      border,
+      borderColor,
+      pallu,
+      blouse,
+      zari,
+      step,
+    });
+    // The GLB already carries the finished saree. Repaint only after a real change.
+    if (authoredKey.current === null || authoredKey.current === key) {
+      authoredKey.current = key;
+      return;
+    }
     controller.setAssignPreview(false);
     renderConfigurationOnModel(controller);
     invalidate();
-  }, [color, shade, border, borderColor, pallu, blouse, zari, invalidate]);
+  }, [color, shade, border, borderColor, pallu, blouse, zari, step, invalidate]);
 
   useEffect(() => {
     if (!modelEditMode) {
@@ -282,11 +352,11 @@ function HeroGlb({ url }: { url: string }) {
       }
       const session = assignRef.current;
       const controller = controllerRef.current;
-      session?.persist();
-      // Leave the blue/gold guide and draw the real edit on the main saree.
+      if (session?.isDirty()) session.persist();
+      controller?.setLivePaint(false);
       controller?.setAssignPreview(false);
       controller?.setStrictAssignMasks(!!session?.hasUserEdits(), false);
-      if (controller) renderConfigurationOnModel(controller);
+      if (controller && session?.hasUserEdits()) renderConfigurationOnModel(controller);
       invalidate();
       return;
     }
@@ -296,12 +366,12 @@ function HeroGlb({ url }: { url: string }) {
       'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'9\' fill=\'none\' stroke=\'%23183A72\' stroke-width=\'2\'/%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'1.5\' fill=\'%23183A72\'/%3E%3C/svg%3E") 12 12, cell';
     mapOnRef.current = false;
     const entering = controllerRef.current;
+    entering?.setLivePaint(false);
     entering?.setAssignPreview(false);
     entering?.setStrictAssignMasks(
       !!assignRef.current?.hasUserEdits() || !!assignRef.current?.hasSavedCheckpoint(),
       false,
     );
-    if (entering) renderConfigurationOnModel(entering);
 
     // Double-side cloth so paint rays still hit when the camera is tight on folds.
     const sideRestore: Array<{ mat: THREE.Material; side: THREE.Side }> = [];
@@ -327,8 +397,10 @@ function HeroGlb({ url }: { url: string }) {
       rebuildRafRef.current = requestAnimationFrame(() => {
         rebuildRafRef.current = 0;
         const controller = controllerRef.current;
-        controller?.setAssignPreview(false);
-        if (controller) renderConfigurationOnModel(controller);
+        if (!controller) return;
+        controller.setLivePaint(true);
+        controller.setAssignPreview(false);
+        renderConfigurationOnModel(controller);
         invalidate();
       });
     };
@@ -368,10 +440,13 @@ function HeroGlb({ url }: { url: string }) {
       }
       const controller = controllerRef.current;
       const session = assignRef.current;
+      controller?.setLivePaint(false);
       controller?.setAssignPreview(false);
       controller?.setStrictAssignMasks(true, false);
       if (controller) renderConfigurationOnModel(controller);
-      session?.persist();
+      if (session?.isDirty()) {
+        window.setTimeout(() => session.persist(), 250);
+      }
       bumpAssignRevision();
       invalidate();
     };

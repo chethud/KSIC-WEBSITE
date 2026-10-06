@@ -1,32 +1,13 @@
-import { ContactShadows } from '@react-three/drei';
-
 /** Clean white studio — hard directional light so faceted silk reads clearly */
 export function StudioLighting() {
   return (
     <>
       <color attach="background" args={['#ffffff']} />
-      <ambientLight intensity={0.48} color="#ffffff" />
-      <hemisphereLight args={['#ffffff', '#e8e8e8', 0.28]} />
-      <directionalLight
-        position={[3.2, 5.8, 2.8]}
-        intensity={1.25}
-        color="#ffffff"
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-bias={-0.00015}
-        shadow-normalBias={0.03}
-      />
+      <ambientLight intensity={0.55} color="#ffffff" />
+      <hemisphereLight args={['#ffffff', '#e8e8e8', 0.32]} />
+      <directionalLight position={[3.2, 5.8, 2.8]} intensity={1.25} color="#ffffff" />
       <directionalLight position={[-2.6, 2.4, 2.2]} intensity={0.35} color="#f5f6f8" />
       <directionalLight position={[0.15, 3.2, -3.4]} intensity={0.22} color="#ffffff" />
-      <ContactShadows
-        position={[0, 0.005, 0]}
-        opacity={0.16}
-        scale={9}
-        blur={2.4}
-        far={3.2}
-        color="#1f1f1f"
-      />
     </>
   );
 }

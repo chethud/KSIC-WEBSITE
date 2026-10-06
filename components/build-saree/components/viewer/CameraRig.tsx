@@ -11,11 +11,11 @@ const PRESETS: Record<
 > = {
   // Original full-figure framing — head-to-toe namaste in the white studio.
   'three-quarter': { position: [1.2, 0.9, 2.45], target: [0, 0.85, 0] },
-  front: { position: [0, 0.88, 2.55], target: [0, 0.85, 0] },
+  front: { position: [0, 0.85, 2.85], target: [0, 0.75, 0] },
   side: { position: [2.55, 0.88, 0.15], target: [0, 0.85, 0] },
   back: { position: [0.12, 0.9, -2.55], target: [0, 0.85, 0] },
   detail: { position: [0.85, 0.95, 1.45], target: [0.05, 0.95, 0] },
-  reset: { position: [0, 0.88, 2.55], target: [0, 0.85, 0] },
+  reset: { position: [0, 0.85, 2.85], target: [0, 0.75, 0] },
 };
 
 export function CameraRig() {

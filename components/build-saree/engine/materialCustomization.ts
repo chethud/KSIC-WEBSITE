@@ -493,7 +493,7 @@ export class SareeMaterialController {
   readonly regions: RegionRegistry;
   readonly baselineRoot: THREE.Object3D;
   private readonly originals = new Map<SlotKey, MaterialSnapshot>();
-  private readonly masks: RegionMaskTextures;
+  readonly masks: RegionMaskTextures;
   private workingCanvas: HTMLCanvasElement | null = null;
   private workingCtx: CanvasRenderingContext2D | null = null;
   private baseImageData: ImageData | null = null;
@@ -516,6 +516,8 @@ export class SareeMaterialController {
   strictAssignMasks = false;
   /** 'final' | 'original' | 'selected' — dev-only albedo preview */
   debugMaterialView: 'final' | 'original' | 'selected' = 'final';
+  /** Brush drag: skip morphology so the stroke stays responsive. */
+  private livePaint = false;
 
   private customization = {
     saree: null as string | null,
@@ -550,8 +552,8 @@ export class SareeMaterialController {
     // Keep authored Meshy hard normals — no computeVertexNormals / no smooth shading.
     root.traverse((obj) => {
       if (!(obj instanceof THREE.Mesh)) return;
-      obj.castShadow = true;
-      obj.receiveShadow = true;
+      obj.castShadow = false;
+      obj.receiveShadow = false;
       obj.frustumCulled = true;
       const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
       const cloned = mats.map((m) => {
@@ -758,27 +760,32 @@ export class SareeMaterialController {
     const borderActive = !!(
       this.customization.borderStyle || this.customization.border
     );
+    // Live strokes use the raw masks. Gap-fill runs once when the stroke ends.
     const borderPaint = border
-      ? borderActive
-        ? fillBorderStripGaps(
-            exclusiveBorderPaintMask(border, w, h, borderExclude, 3),
-            w,
-            h,
-            borderExclude,
-            12,
-          )
-        : exclusiveBorderPaintMask(border, w, h, borderExclude, 2)
+      ? this.livePaint
+        ? border
+        : borderActive
+          ? fillBorderStripGaps(
+              exclusiveBorderPaintMask(border, w, h, borderExclude, 2),
+              w,
+              h,
+              borderExclude,
+              8,
+            )
+          : exclusiveBorderPaintMask(border, w, h, borderExclude, 1)
       : null;
     const palluBorderPaint = palluBorder
-      ? borderActive
-        ? fillBorderStripGaps(
-            exclusiveBorderPaintMask(palluBorder, w, h, borderExclude, 3),
-            w,
-            h,
-            borderExclude,
-            12,
-          )
-        : exclusiveBorderPaintMask(palluBorder, w, h, borderExclude, 2)
+      ? this.livePaint
+        ? palluBorder
+        : borderActive
+          ? fillBorderStripGaps(
+              exclusiveBorderPaintMask(palluBorder, w, h, borderExclude, 2),
+              w,
+              h,
+              borderExclude,
+              8,
+            )
+          : exclusiveBorderPaintMask(palluBorder, w, h, borderExclude, 1)
       : null;
 
     /** Border / zari / pallu-border strength (0–1). */
@@ -1155,7 +1162,7 @@ export class SareeMaterialController {
           if (this.customization.pallu) addMask(pallu);
           if (this.customization.blouse) addMask(blouse);
         }
-        const dilateR = this.strictAssignMasks ? 1 : 14;
+        const dilateR = this.livePaint ? 1 : this.strictAssignMasks ? 1 : 6;
         const dilated = dilateMaskRgba(combined, w, h, dilateR);
         tintSilkRegion(dilated, silkHex, combined);
         if (this.customization.pallu) {
@@ -1163,13 +1170,14 @@ export class SareeMaterialController {
             pallu!,
             w,
             h,
-            this.strictAssignMasks ? 1 : 10,
+            this.livePaint || this.strictAssignMasks ? 1 : 4,
           );
           tintSilkRegion(palluDilated, this.customization.pallu, pallu);
         }
         // Non-strict: strip leftover warm atlas hue so gaps don't stay red.
         // Strict (saved map): NEVER flood silk colour outside painted main saree.
-        if (!this.strictAssignMasks) {
+        // Skipped while the brush is down — the release rebuild does the full pass.
+        if (!this.strictAssignMasks && !this.livePaint) {
           stripOriginalWarmHue(silkHex);
         }
       }
@@ -1201,7 +1209,7 @@ export class SareeMaterialController {
 
       // Final purge: only when masks are not user-authored — otherwise colour
       // must stay inside the saved main-saree (blue) region only.
-      if (silkHex && !this.strictAssignMasks) {
+      if (silkHex && !this.strictAssignMasks && !this.livePaint) {
         const [tr, tg, tb] = hexToRgb(silkHex);
         for (let y = 0; y < h; y++) {
           for (let x = 0; x < w; x++) {
@@ -1246,14 +1254,24 @@ export class SareeMaterialController {
     this.pushTintToMainModel();
   }
 
-  applySareeColor(hex: string | null): void {
-    this.customization.saree = hex;
+  /** One atlas rebuild after several colour slots are staged. */
+  commitAppearance(): void {
     this.rebuildAlbedo();
   }
 
-  applyBorderColor(hex: string | null): void {
+  /** While true, brush moves skip the slow border gap-fill. */
+  setLivePaint(on: boolean): void {
+    this.livePaint = on;
+  }
+
+  applySareeColor(hex: string | null, rebuild = true): void {
+    this.customization.saree = hex;
+    if (rebuild) this.rebuildAlbedo();
+  }
+
+  applyBorderColor(hex: string | null, rebuild = true): void {
     this.customization.border = hex;
-    this.rebuildAlbedo();
+    if (rebuild) this.rebuildAlbedo();
   }
 
   /** Apply woven border motif (temple / mysore / …) into border UV masks. */
@@ -1261,6 +1279,7 @@ export class SareeMaterialController {
     style: string | null,
     borderHex: string | null,
     zariHex: string | null = null,
+    rebuild = true,
   ): void {
     this.customization.borderStyle = style;
     this.customization.border = borderHex;
@@ -1268,27 +1287,27 @@ export class SareeMaterialController {
     if (borderHex && !this.customization.palluBorder) {
       this.customization.palluBorder = borderHex;
     }
-    this.rebuildAlbedo();
+    if (rebuild) this.rebuildAlbedo();
   }
 
-  applyPalluColor(hex: string | null): void {
+  applyPalluColor(hex: string | null, rebuild = true): void {
     this.customization.pallu = hex;
-    this.rebuildAlbedo();
+    if (rebuild) this.rebuildAlbedo();
   }
 
-  applyPalluBorderColor(hex: string | null): void {
+  applyPalluBorderColor(hex: string | null, rebuild = true): void {
     this.customization.palluBorder = hex;
-    this.rebuildAlbedo();
+    if (rebuild) this.rebuildAlbedo();
   }
 
-  applyBlouseColor(hex: string | null): void {
+  applyBlouseColor(hex: string | null, rebuild = true): void {
     this.customization.blouse = hex;
-    this.rebuildAlbedo();
+    if (rebuild) this.rebuildAlbedo();
   }
 
-  applyZariColor(hex: string | null): void {
+  applyZariColor(hex: string | null, rebuild = true): void {
     this.customization.zari = hex;
-    this.rebuildAlbedo();
+    if (rebuild) this.rebuildAlbedo();
   }
 
   resetCustomization(): void {
@@ -1353,6 +1372,7 @@ export class SareeMaterialController {
 
   /** Saree→blue / Border→gold live guide while assigning regions. */
   setAssignPreview(enabled: boolean): void {
+    if (this.assignPreviewEnabled === enabled) return;
     this.assignPreviewEnabled = enabled;
     if (enabled) {
       this.debugRegionsEnabled = false;
@@ -1364,10 +1384,7 @@ export class SareeMaterialController {
 
   /** Painted masks become the only source of truth for Colour / Border / … */
   setStrictAssignMasks(enabled: boolean, rebuild = true): void {
-    if (this.strictAssignMasks === enabled) {
-      if (rebuild) this.rebuildAlbedo();
-      return;
-    }
+    if (this.strictAssignMasks === enabled) return;
     this.strictAssignMasks = enabled;
     if (rebuild) this.rebuildAlbedo();
   }
@@ -1444,6 +1461,7 @@ export function installSareeDebugGlobals(): void {
     enableRegionDebug?: () => void;
     disableRegionDebug?: () => void;
     resetSareeCustomization?: () => void;
+    resetBorder?: () => void;
     applySareeColorDebug?: (hex: string) => void;
     __ksicDebugState?: () => unknown;
     __ksicMaterialPreview?: () => unknown;

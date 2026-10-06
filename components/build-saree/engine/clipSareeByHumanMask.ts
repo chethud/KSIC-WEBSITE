@@ -11,13 +11,14 @@ function readMaskPixels(image: TexImageSource): {
   height: number;
 } {
   const canvas = document.createElement('canvas');
-  const width = image.width as number;
-  const height = image.height as number;
+  const bitmap = image as CanvasImageSource & { width: number; height: number };
+  const width = bitmap.width;
+  const height = bitmap.height;
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('2d context unavailable');
-  ctx.drawImage(image, 0, 0, width, height);
+  ctx.drawImage(bitmap, 0, 0, width, height);
   const img = ctx.getImageData(0, 0, width, height);
   return { data: img.data, width, height };
 }

@@ -225,7 +225,8 @@ export function formatINR(amount: number): string {
   }).format(amount);
 }
 
-export function getLabel(list: CatalogItem[], id: string): string {
+export function getLabel(list: CatalogItem[], id: string | null): string {
+  if (!id) return '';
   return find(list, id)?.name ?? id;
 }
 
