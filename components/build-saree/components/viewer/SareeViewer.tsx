@@ -1,7 +1,7 @@
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Suspense, useLayoutEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { AdaptiveDpr } from '@react-three/drei';
+import { AdaptiveDpr, useTexture } from '@react-three/drei';
 import { HeroModel3D } from './HeroModel3D';
 import { StudioLighting } from './StudioLighting';
 import { CameraRig } from './CameraRig';
@@ -10,6 +10,20 @@ import { useCustomizerStore } from '../../store/customizerStore';
 import { HERO_MODEL_PATH } from '../../data/catalog';
 
 function FpsGuard() {
+  return null;
+}
+
+function PalaceBackdrop() {
+  const texture = useTexture('/atelier/palace-hall.jpg');
+  const scene = useThree((s) => s.scene);
+  useLayoutEffect(() => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+    scene.background = texture;
+    return () => {
+      scene.background = null;
+    };
+  }, [scene, texture]);
   return null;
 }
 
@@ -40,20 +54,12 @@ export function SareeViewer() {
         }}
       >
         <Suspense fallback={null}>
+          <PalaceBackdrop />
           <StudioLighting />
           <HeroModel3D hasHeroModel modelUrl={HERO_MODEL_PATH} />
           <CameraRig />
           <FpsGuard />
           <AdaptiveDpr />
-          <mesh
-            name="studio-floor"
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, -0.001, 0]}
-            raycast={modelEditMode ? () => {} : undefined}
-          >
-            <circleGeometry args={[3.2, 64]} />
-            <meshStandardMaterial color="#ffffff" roughness={1} metalness={0} />
-          </mesh>
         </Suspense>
       </Canvas>
     </div>

@@ -70,31 +70,44 @@ export default function ProfilePage() {
       <Header variant="atelier" />
       <main className="profile">
         <section className="profile__hero">
-          <p className="eyebrow eyebrow--light">Mysore Silk · Demo account</p>
-          <h1 className="display display--light">Welcome, {demoUser.name}</h1>
-          <p className="profile__lead">
-            You are signed in. Follow orders, reopen atelier designs, and keep your silk
-            wardrobe close.
-          </p>
-          <div className="profile__cta">
-            <Link href="/your-saree" className="btn btn--gold">
-              Continue designing
-            </Link>
-            <Link href="/vault" className="btn btn--ghost">
-              My vault
-            </Link>
-            <button type="button" className="btn btn--ghost" disabled title="Demo only">
-              Sign out
-            </button>
+          <div className="profile__hero-copy">
+            <p className="profile__eyebrow">Mysore Silk · Account</p>
+            <h1>
+              Welcome, <span>{demoUser.name}</span>
+            </h1>
+            <p className="profile__lead">
+              You are signed in. Follow orders, reopen atelier designs, and keep your silk
+              wardrobe close.
+            </p>
+            <div className="profile__cta">
+              <Link href="/your-saree" className="profile__btn profile__btn--gold">
+                Continue designing
+              </Link>
+              <Link href="/vault" className="profile__btn profile__btn--line">
+                My vault
+              </Link>
+              <button type="button" className="profile__btn profile__btn--quiet" disabled title="Demo only">
+                Sign out
+              </button>
+            </div>
           </div>
+          <aside className="profile__identity" aria-label="Signed-in member">
+            <span className="profile__mark" aria-hidden="true">
+              AR
+            </span>
+            <p className="profile__identity-kicker">Member since</p>
+            <p className="profile__identity-name">{demoUser.memberSince}</p>
+            <p className="profile__identity-mail">{demoUser.email}</p>
+          </aside>
         </section>
 
         <section className="profile__grid" aria-label="Account areas">
-          {sections.map((item) => (
+          {sections.map((item, index) => (
             <article key={item.title} className="profile__block">
+              <span className="profile__index">{String(index + 1).padStart(2, "0")}</span>
               <h2>{item.title}</h2>
               <p>{item.body}</p>
-              <Link href={item.href} className="btn btn--text btn--on-dark">
+              <Link href={item.href} className="profile__link">
                 {item.action} <span aria-hidden="true">→</span>
               </Link>
             </article>
@@ -103,8 +116,8 @@ export default function ProfilePage() {
 
         <section className="profile__account" id="account" aria-label="Account details">
           <div className="profile__form-copy">
-            <p className="eyebrow eyebrow--light">Account</p>
-            <h2 className="display display--light">Your details</h2>
+            <p className="profile__eyebrow">Account</p>
+            <h2>Your details</h2>
             <p>
               Demo profile for walkthroughs. Replace with real authentication when the
               storefront goes live.
@@ -131,7 +144,10 @@ export default function ProfilePage() {
         </section>
 
         <section className="profile__list" id="orders">
-          <h2 className="display display--light">Orders</h2>
+          <div className="profile__list-head">
+            <p className="profile__eyebrow">Atelier</p>
+            <h2>Orders</h2>
+          </div>
           <ul className="profile__orders">
             {demoOrders.map((order) => (
               <li key={order.id} className="profile__order">
@@ -149,7 +165,10 @@ export default function ProfilePage() {
         </section>
 
         <section className="profile__list" id="addresses">
-          <h2 className="display display--light">Addresses</h2>
+          <div className="profile__list-head">
+            <p className="profile__eyebrow">Delivery</p>
+            <h2>Addresses</h2>
+          </div>
           <ul className="profile__addresses">
             {demoAddresses.map((addr) => (
               <li key={addr.label} className="profile__address">
