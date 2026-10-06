@@ -1,0 +1,47 @@
+{
+  "asset": "MASTER_SAREE.glb",
+  "optimized": "MASTER_SAREE_OPTIMIZED.glb",
+  "scale": "1 unit = 1 meter",
+  "heightApprox": "1.70m",
+  "origin": "center feet",
+  "meshes": [
+    "Body",
+    "Head",
+    "Arms",
+    "Hands",
+    "Legs",
+    "Feet",
+    "Blouse_Base",
+    "Blouse_Sleeves",
+    "Blouse_Details",
+    "Saree_Base",
+    "Saree_Body",
+    "Saree_Pleats",
+    "Saree_Border",
+    "Saree_Pallu",
+    "Saree_Pallu_Border",
+    "Saree_End_Fall",
+    "Saree_Zari",
+    "Saree_Details"
+  ],
+  "materials": [
+    "MATERIAL_01_BODY",
+    "MATERIAL_02_BORDER",
+    "MATERIAL_03_PALLU",
+    "MATERIAL_04_PALLU_BORDER",
+    "MATERIAL_05_ZARI",
+    "MATERIAL_06_BLOUSE",
+    "MATERIAL_07_SKIN",
+    "MATERIAL_08_HAIR"
+  ],
+  "textures": [
+    "textures/saree/saree-base-mask.png",
+    "textures/saree/border-mask.png",
+    "textures/saree/pallu-mask.png",
+    "textures/saree/zari-mask.png",
+    "textures/saree/blouse-mask.png",
+    "textures/saree/silk-normal.png",
+    "textures/saree/silk-roughness.png"
+  ],
+  "note": "Procedural modular master for WebGL customizer. Replace with DCC-authored GLB using identical mesh/material names for production photorealism."
+}

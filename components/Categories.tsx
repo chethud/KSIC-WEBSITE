@@ -4,14 +4,14 @@ const categories = [
   {
     title: "Sarees",
     copy: "The heart\nof our house",
-    image: "/indian-saree-1.jpg",
+    image: "/cat-sarees.jpg?v=2",
     alt: "Woman wearing a Mysore silk saree",
   },
   {
-    title: "Men",
-    copy: "Silk shirts.\nTies & more.",
-    image: "/cat-men.jpg",
-    alt: "Man in contemporary silk attire",
+    title: "Bridal",
+    copy: "Ceremonial silk\nfor forever.",
+    image: "/cat-bridal.jpg",
+    alt: "Bridal Mysore silk saree with gold zari",
   },
   {
     title: "Accessories",

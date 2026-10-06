@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useRef } from "react";
 
 const products = [
-  { name: "The Royal Blue", code: "MS-001", image: "/prod-blue.jpg" },
-  { name: "The Vermilion", code: "MS-002", image: "/zari-macro.jpg" },
-  { name: "The Mysore Ivory", code: "MS-003", image: "/silk-threads.jpg" },
-  { name: "The Palace Green", code: "MS-004", image: "/prod-vermilion.jpg" },
-  { name: "The Maharani", code: "MS-005", image: "/collection-1.jpg" },
+  { name: "The Royal Blue", code: "MS-001", image: "/products/KSIC-007/product.jpg" },
+  { name: "The Vermilion", code: "MS-002", image: "/collection-4.jpg" },
+  { name: "The Mysore Ivory", code: "MS-003", image: "/products/KSIC-003/product.jpg" },
+  { name: "The Palace Green", code: "MS-004", image: "/products/KSIC-002/product.jpg" },
+  { name: "The Maharani", code: "MS-005", image: "/products/KSIC-005/product.jpg" },
 ];
 
 export default function Collection() {

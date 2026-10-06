@@ -1,0 +1,4 @@
+These PNGs are heuristic seeds from albedo color + world-Y baking.
+They are NOT verified ground-truth labels.
+Correct them before using as training targets.
+Copied: region_saree_main.png, region_pallu.png, region_border.png, region_zari.png, region_blouse.png, region_skin.png, region_hair.png, region_pallu_border.png, region_debug.png

@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "name": "saree-flat-construction-v1",
+  "coordinateSystem": {
+    "x0": "left",
+    "x1": "right",
+    "y0": "top",
+    "y1": "bottom",
+    "note": "Independent semantic fabric space. NOT TEXCOORD_0 from the GLB. Map to 3D via calibration anchors."
+  },
+  "mappingNote": "MASTER_SAREE.glb has ~958 fragmented UV islands. Do not treat atlas UV as this blueprint. Use CALIBRATE anchors + MAP TO 3D.",
+  "regions": {
+    "topBorder": { "id": 8, "name": "TOP_BORDER", "type": "polygon" },
+    "bottomBorder": { "id": 9, "name": "BOTTOM_BORDER", "type": "polygon" },
+    "leftBorder": { "id": 6, "name": "LEFT_BORDER", "type": "polygon" },
+    "rightBorder": { "id": 7, "name": "RIGHT_BORDER", "type": "polygon" },
+    "body": { "id": 1, "name": "BODY", "type": "polygon" },
+    "pallu": { "id": 2, "name": "PALLU", "type": "polygon" },
+    "zariBottom": { "id": 4, "name": "ZARI", "type": "polygon" },
+    "blouse": { "id": 5, "name": "BLOUSE", "type": "polygon" }
+  }
+}

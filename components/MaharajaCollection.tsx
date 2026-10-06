@@ -1,45 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
-
-const products = [
-  {
-    name: "The Royal Blue",
-    code: "MS-001",
-    price: "₹ 1,28,000",
-    image: "/prod-blue.jpg",
-    hover: "/collection-4.jpg",
-  },
-  {
-    name: "The Vermilion",
-    code: "MS-002",
-    price: "₹ 1,42,000",
-    image: "/fabric-red.jpg",
-    hover: "/prod-vermilion.jpg",
-  },
-  {
-    name: "The Mysore Ivory",
-    code: "MS-003",
-    price: "₹ 1,18,000",
-    image: "/collection-3.jpg",
-    hover: "/heirloom.jpg",
-  },
-  {
-    name: "The Palace Green",
-    code: "MS-004",
-    price: "₹ 1,36,000",
-    image: "/heritage-palace.jpg",
-    hover: "/silk-threads.jpg",
-  },
-  {
-    name: "The Maharani",
-    code: "MS-005",
-    price: "₹ 1,84,000",
-    image: "/collection-1.jpg",
-    hover: "/indian-saree-1.jpg",
-  },
-];
+import { MAHARAJA_PRODUCTS } from "@/lib/maharaja-products";
 
 export default function MaharajaCollection() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -53,45 +17,50 @@ export default function MaharajaCollection() {
 
   return (
     <section className="maharaja" id="collection">
-      <header className="maharaja__head">
-        <div>
-          <p className="eyebrow">Featured Collection</p>
-          <h2 className="display">
-            The Maharaja
-            <br />
-            Collection
-          </h2>
-          <p className="maharaja__lead">A curated expression of Mysuru&apos;s royal spirit.</p>
-        </div>
-        <div className="maharaja__controls">
-          <a href="#collection" className="btn btn--text">
-            View All <span aria-hidden="true">→</span>
-          </a>
-          <div className="maharaja__arrows">
-            <button type="button" aria-label="Previous products" onClick={() => scrollBy(-1)}>
-              ←
-            </button>
-            <button type="button" aria-label="Next products" onClick={() => scrollBy(1)}>
-              →
-            </button>
+      <div className="maharaja__inner">
+        <header className="maharaja__head">
+          <div className="maharaja__intro">
+            <p className="maharaja__eyebrow">Featured Collection</p>
+            <h2 className="maharaja__title">The Maharaja Collection</h2>
+            <p className="maharaja__lead">
+              A curated expression of Mysuru&apos;s royal spirit.
+            </p>
           </div>
-        </div>
-      </header>
+          <div className="maharaja__controls">
+            <Link href="/collection/royal-blue" className="maharaja__view-all">
+              View All <span aria-hidden="true">→</span>
+            </Link>
+            <div className="maharaja__arrows">
+              <button type="button" aria-label="Previous products" onClick={() => scrollBy(-1)}>
+                ←
+              </button>
+              <button type="button" aria-label="Next products" onClick={() => scrollBy(1)}>
+                →
+              </button>
+            </div>
+          </div>
+        </header>
 
-      <div className="maharaja__track" ref={trackRef} tabIndex={0}>
-        {products.map((p) => (
-          <article key={p.code} className="maharaja__item">
-            <div className="maharaja__media">
-              <Image src={p.image} alt={p.name} fill sizes="280px" className="is-a" />
-              <Image src={p.hover} alt="" fill sizes="280px" className="is-b" aria-hidden />
-            </div>
-            <div className="maharaja__meta">
-              <h3>{p.name}</h3>
-              <p>{p.code}</p>
-              <span>{p.price}</span>
-            </div>
-          </article>
-        ))}
+        <div className="maharaja__track" ref={trackRef} tabIndex={0}>
+          {MAHARAJA_PRODUCTS.map((p) => (
+            <Link
+              key={p.code}
+              href={`/collection/${p.slug}`}
+              className="maharaja__item"
+              aria-label={`View ${p.name} — ${p.priceLabel}`}
+            >
+              <div className="maharaja__media">
+                <Image src={p.image} alt={p.name} fill sizes="280px" className="is-a" />
+                <Image src={p.hover} alt="" fill sizes="280px" className="is-b" aria-hidden />
+              </div>
+              <div className="maharaja__meta">
+                <h3>{p.name}</h3>
+                <p>{p.code}</p>
+                <span>{p.priceLabel}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

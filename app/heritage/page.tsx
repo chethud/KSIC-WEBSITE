@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import HeritageJourney from "@/components/home/HeritageJourney";
-import Footer from "@/components/home/Footer";
 
 export const metadata = {
   title: "The Heritage of Mysore Silk — A Saree Beyond Time",
@@ -11,11 +10,10 @@ export const metadata = {
 export default function HeritagePage() {
   return (
     <>
-      <Header variant="atelier" current="heritage" />
+      <Header variant="heritage" current="heritage" />
       <main>
         <HeritageJourney />
       </main>
-      <Footer />
     </>
   );
 }

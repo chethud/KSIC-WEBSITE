@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "atlasSize": 1024,
+  "label": "All fabric islands on the atlas",
+  "color": [
+    200,
+    190,
+    170
+  ],
+  "paths": [
+    "M0.0,0.0 L0.0,1023.0 L1023.0,1023.0 L1023.0,0.0 Z"
+  ],
+  "pathCount": 1
+}

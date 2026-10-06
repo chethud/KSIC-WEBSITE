@@ -1,0 +1,4 @@
+Use the production GLB at:
+  public/models/MASTER_SAREE.glb
+Absolute: C:\Users\HARSHITH V MALIPATIL\OneDrive\Desktop\chethu workspace\make your own saree\public\models\MASTER_SAREE.glb
+Do not replace this GLB when labeling — masks must match its UVs.

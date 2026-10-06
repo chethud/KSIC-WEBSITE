@@ -15,7 +15,7 @@ export default function Footer() {
             <Link href="#collection">Sarees</Link>
             <Link href="#collection">New Arrivals</Link>
             <Link href="#collection">Collections</Link>
-            <Link href="#categories">Men</Link>
+            <Link href="#categories">Bridal</Link>
             <Link href="#collection">Gifting</Link>
           </div>
           <div>

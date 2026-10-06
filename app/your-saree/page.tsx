@@ -1,17 +1,12 @@
-import Header from "@/components/Header";
-import SareeConfigurator from "@/components/your-saree/SareeConfigurator";
-import "./your-saree.css";
+import type { Metadata } from "next";
+import YourSareeClient from "./YourSareeClient";
 
-export const metadata = {
-  title: "Your Saree — Craft Your Own | Mysore Silk",
-  description: "Design your own Mysore silk saree — colour, weave, zari, border, pallu and motifs.",
+export const metadata: Metadata = {
+  title: "Build Your Own Saree — KSIC Atelier | Mysore Silk",
+  description:
+    "Design your own Mysore silk saree in 3D — colour, border, pallu, blouse, zari and finish.",
 };
 
 export default function YourSareePage() {
-  return (
-    <>
-      <Header variant="atelier" current="your-saree" />
-      <SareeConfigurator />
-    </>
-  );
+  return <YourSareeClient />;
 }

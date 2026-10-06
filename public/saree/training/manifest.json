@@ -1,0 +1,15 @@
+{
+  "generatedFrom": "public/models/MASTER_SAREE.glb",
+  "atlasSize": 1024,
+  "vertexCount": 29955,
+  "triangleCount": 9985,
+  "outputs": {
+    "albedo": "source/albedo.png",
+    "uvLayout": "uv/saree-uv-layout.png",
+    "uvWireframe": "uv/saree-uv-wireframe.png",
+    "uvAlbedo": "uv/saree-uv-albedo.png",
+    "templates": "templates/",
+    "seeds": "seeds/",
+    "config": "config/segmentation.json"
+  }
+}

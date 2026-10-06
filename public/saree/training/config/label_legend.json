@@ -1,0 +1,15 @@
+{
+  "format": "single-channel class id map (uint8)",
+  "background": 255,
+  "classes": {
+    "0": "SKIN (protected)",
+    "1": "BODY",
+    "2": "PALLU",
+    "3": "BORDER",
+    "4": "ZARI",
+    "5": "BLOUSE",
+    "6": "HAIR (optional ignore)",
+    "255": "BACKGROUND / unassigned"
+  },
+  "trainingHint": "Paint or predict per-pixel class IDs in the same UV atlas space as source/albedo.png. Pixels outside UV islands should stay 255."
+}

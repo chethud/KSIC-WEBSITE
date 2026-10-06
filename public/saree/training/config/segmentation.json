@@ -1,0 +1,108 @@
+{
+  "model": "MASTER_SAREE.glb",
+  "modelPathHint": "public/models/MASTER_SAREE.glb",
+  "strategy": "uv_masks",
+  "uvChannel": 0,
+  "uvOrientation": "gltf_v0_top_flipY_false",
+  "atlasSize": 1024,
+  "packedMask": {
+    "file": "templates/saree-segmentation.png",
+    "R": "BODY",
+    "G": "PALLU",
+    "B": "BORDER",
+    "A": "ZARI",
+    "note": "BLOUSE and SKIN use separate grayscale masks"
+  },
+  "regions": {
+    "body": {
+      "id": 1,
+      "name": "BODY",
+      "maskFile": "templates/body-mask.png",
+      "debugColor": [
+        40,
+        90,
+        220
+      ],
+      "packedChannel": "R"
+    },
+    "pallu": {
+      "id": 2,
+      "name": "PALLU",
+      "maskFile": "templates/pallu-mask.png",
+      "debugColor": [
+        20,
+        180,
+        180
+      ],
+      "packedChannel": "G"
+    },
+    "border": {
+      "id": 3,
+      "name": "BORDER",
+      "maskFile": "templates/border-mask.png",
+      "debugColor": [
+        230,
+        190,
+        40
+      ],
+      "packedChannel": "B"
+    },
+    "zari": {
+      "id": 4,
+      "name": "ZARI",
+      "maskFile": "templates/zari-mask.png",
+      "debugColor": [
+        255,
+        245,
+        180
+      ],
+      "packedChannel": "A"
+    },
+    "blouse": {
+      "id": 5,
+      "name": "BLOUSE",
+      "maskFile": "templates/blouse-mask.png",
+      "debugColor": [
+        200,
+        80,
+        160
+      ]
+    },
+    "skin": {
+      "id": 0,
+      "name": "SKIN",
+      "maskFile": "templates/skin-mask.png",
+      "debugColor": [
+        80,
+        200,
+        120
+      ],
+      "protected": true,
+      "note": "Do not tint; lock face/hands/hair skin areas"
+    }
+  },
+  "mesh": {
+    "name": "SareeCloth",
+    "vertexCount": 29955,
+    "triangleCount": 9985,
+    "uvChannel": 0,
+    "uvMin": [
+      2.6342042474425398e-05,
+      2.6464462280273438e-05
+    ],
+    "uvMax": [
+      0.9963106513023376,
+      0.9999735951423645
+    ],
+    "materials": [
+      "MATERIAL_01_BODY.001"
+    ],
+    "meshCount": 1,
+    "materialCount": 1
+  },
+  "seeds": {
+    "directory": "seeds/",
+    "groundTruth": false,
+    "note": "Heuristic albedo+Y bakes \u2014 use only as weak initialization, not labels for training truth"
+  }
+}

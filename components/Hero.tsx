@@ -1,14 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-
-const chapters = [
-  { id: "silk", href: "#silk", n: "01", label: "The Silk" },
-  { id: "categories", href: "#categories", n: "02", label: "The Craft" },
-  { id: "collection", href: "#collection", n: "03", label: "The Collection" },
-  { id: "heritage", href: "#heritage", n: "04", label: "The Legacy" },
-];
+import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 const miniStories = [
   {
@@ -45,8 +39,6 @@ export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState("silk");
-  const [videoOpen, setVideoOpen] = useState(false);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -103,32 +95,6 @@ export default function Hero() {
     };
   }, []);
 
-  useEffect(() => {
-    const els = chapters
-      .map((c) => document.getElementById(c.id))
-      .filter(Boolean) as HTMLElement[];
-    if (!els.length || !("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { threshold: 0.35 }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!videoOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setVideoOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [videoOpen]);
-
   return (
     <section className="hero" id="hero" ref={heroRef}>
       <div className="hero__stage">
@@ -164,20 +130,10 @@ export default function Hero() {
         </a>
       </div>
 
-      <nav className="chapters" aria-label="Story chapters">
-        <span className="chapters__line" aria-hidden="true" />
-        {chapters.map((c) => (
-          <a key={c.id} href={c.href} className={active === c.id ? "is-active" : undefined}>
-            <em>{c.n}</em>
-            <span>{c.label}</span>
-          </a>
-        ))}
-      </nav>
-
       <div className="hero__bottom">
         <a href="#silk" className="zari-card">
           <div className="zari-card__media">
-            <Image src="/zari-macro.jpg" alt="Mysore silk zari detail" fill sizes="220px" />
+            <Image src="/zari-macro.jpg?v=2" alt="Mysore silk zari detail" fill sizes="56px" />
           </div>
           <div className="zari-card__copy">
             <strong>
@@ -208,7 +164,7 @@ export default function Hero() {
         </div>
 
         <div className="hero__aside">
-          <button type="button" className="watch-story" onClick={() => setVideoOpen(true)}>
+          <Link href="/heritage" className="watch-story">
             <span className="watch-story__play" aria-hidden="true">
               ▶
             </span>
@@ -217,24 +173,12 @@ export default function Hero() {
               <br />
               Our Story
             </span>
-          </button>
+          </Link>
           <a href="#silk" className="scroll-cue" aria-label="Scroll to The Silk">
             <span />
           </a>
         </div>
       </div>
-
-      {videoOpen ? (
-        <div className="video-modal" role="dialog" aria-modal="true" aria-label="Watch our story">
-          <button type="button" className="video-modal__close" onClick={() => setVideoOpen(false)}>
-            Close
-          </button>
-          <div className="video-modal__frame">
-            <Image src="/loom-craft.jpg" alt="The story of Mysore Silk" fill sizes="100vw" />
-            <p>A cinematic film experience — coming to the atelier soon.</p>
-          </div>
-        </div>
-      ) : null}
     </section>
   );
 }

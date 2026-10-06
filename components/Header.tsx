@@ -5,37 +5,29 @@ import { useEffect, useState } from "react";
 import Emblem from "./Emblem";
 
 type HeaderProps = {
-  variant?: "home" | "atelier";
-  current?: "your-saree" | "heritage";
+  variant?: "home" | "atelier" | "heritage";
+  current?: "your-saree" | "heritage" | "sarees";
 };
 
 const homeLinks = [
   { href: "/#collection", label: "Collections" },
-  { href: "/#categories", label: "Sarees" },
-  { href: "/#categories", label: "Men" },
+  { href: "/sarees", label: "Sarees", key: "sarees" as const },
   { href: "/#silk", label: "Our Craft" },
+  { href: "/your-saree", label: "Build Your Saree", key: "your-saree" as const },
   { href: "/heritage", label: "Heritage", key: "heritage" as const },
-  { href: "/#heritage", label: "Stories" },
 ];
 
 export default function Header({ variant = "home", current }: HeaderProps) {
-  const [scrolled, setScrolled] = useState(variant === "atelier");
+  const [scrolled, setScrolled] = useState(variant === "atelier" || variant === "heritage");
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const links =
-    current === "your-saree"
-      ? [
-          { href: "/#collection", label: "Collections" },
-          { href: "/#categories", label: "Sarees" },
-          { href: "/your-saree", label: "Your Saree", key: "your-saree" as const },
-          { href: "/heritage", label: "Heritage", key: "heritage" as const },
-          { href: "/#heritage", label: "Stories" },
-        ]
-      : homeLinks;
+  const links = homeLinks;
+  const variantClass =
+    variant === "atelier" ? " nav--atelier" : variant === "heritage" ? " nav--heritage" : "";
 
   useEffect(() => {
-    if (variant === "atelier") {
+    if (variant === "atelier" || variant === "heritage") {
       setScrolled(true);
       return;
     }
@@ -55,9 +47,7 @@ export default function Header({ variant = "home", current }: HeaderProps) {
   return (
     <>
       <header
-        className={`nav${scrolled ? " is-scrolled" : ""}${hidden ? " is-hidden" : ""}${
-          variant === "atelier" ? " nav--atelier" : ""
-        }`}
+        className={`nav${scrolled ? " is-scrolled" : ""}${hidden ? " is-hidden" : ""}${variantClass}`}
       >
         <Link href="/" className="nav__brand" aria-label="Mysore Silk home">
           <Emblem />
@@ -76,20 +66,22 @@ export default function Header({ variant = "home", current }: HeaderProps) {
         </nav>
 
         <div className="nav__actions">
-          <button type="button" className="icon-btn" aria-label="Search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.1">
-              <circle cx="11" cy="11" r="6.2" />
-              <path d="M16.2 16.2 20 20" />
-            </svg>
-          </button>
-          <button type="button" className="icon-btn" aria-label="Account">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.1">
+          {variant !== "atelier" ? (
+            <>
+              <span className="nav__divider" aria-hidden="true" />
+              <Link href="/your-saree" className="nav__text">
+                Personalize
+              </Link>
+            </>
+          ) : null}
+          <Link href="/profile" className="icon-btn" aria-label="Account">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <circle cx="12" cy="8" r="3.2" />
               <path d="M5.5 19c1.4-3.2 3.8-4.7 6.5-4.7s5.1 1.5 6.5 4.7" />
             </svg>
-          </button>
+          </Link>
           <button type="button" className="icon-btn" aria-label="Bag">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6.5 7.5h11l-.9 11.2H7.4L6.5 7.5z" />
               <path d="M9 7.5V6.4a3 3 0 0 1 6 0v1.1" />
             </svg>
@@ -115,6 +107,9 @@ export default function Header({ variant = "home", current }: HeaderProps) {
                 {link.label}
               </Link>
             ))}
+            <Link href="/your-saree" onClick={() => setMenuOpen(false)}>
+              Personalize
+            </Link>
           </nav>
         </div>
       ) : null}
