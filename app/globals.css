@@ -2275,9 +2275,38 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .profile__addresses { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 640px) {
+.profile__identity-mail,
+.profile__details dd {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 899px) {
+  .profile__hero {
+    padding: calc(var(--nav-h) + 1.5rem) var(--gutter) 1.75rem;
+    gap: 1.35rem;
+  }
+  .profile__hero h1 {
+    font-size: clamp(2.05rem, 8.6vw, 2.75rem);
+  }
+  .profile__lead { font-size: 0.95rem; }
+  .profile__cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .profile__btn { width: 100%; }
+  .profile__btn--gold { grid-column: 1 / -1; }
+  .profile__identity { width: 100%; }
+  .profile__account,
+  .profile__list {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
   .profile__details { grid-template-columns: 1fr; }
-  .profile__order { flex-direction: column; }
+  .profile__order {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
