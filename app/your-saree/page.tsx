@@ -5,7 +5,7 @@ import YourSareeClient from "./YourSareeClient";
 export const metadata: Metadata = {
   title: "Build Your Own Saree — KSIC Atelier | Mysore Silk",
   description:
-    "Design your own Mysore silk saree in 3D — colour, border, pallu, blouse, zari and finish.",
+    "Design your own Mysore silk saree in 3D — colour, border, pallu, zari and finish.",
 };
 
 export default function YourSareePage() {

@@ -14,9 +14,7 @@ export function ZariSelector() {
     <div className="selector-block zari-step">
       <h2 className="step-title">Choose Your Zari</h2>
       <p className="step-sub">
-        Metallic thread that catches the light
-        <br />
-        and brings your Mysore silk to life.
+        Select the metallic thread that brings your saree to life. Each zari type has its own unique shine, texture and heritage.
       </p>
 
       <div className="zari-grid" role="listbox" aria-label="Zari finishes">

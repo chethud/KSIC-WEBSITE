@@ -99,21 +99,23 @@ export default function Hero() {
       </div>
 
       <div className="hero__bottom">
-        <div className="hero__stories">
-          <div className="zari-card">
-            <div className="zari-card__media">
-              <Image src="/zari-macro.jpg?v=2" alt="Mysore silk zari detail" fill sizes="56px" />
-            </div>
-            <div className="zari-card__copy">
-              <strong>
-                Experience
-                <br />
-                the Zari
-              </strong>
-              <span>Zoom into details</span>
-            </div>
+        <a href="#silk" className="zari-card">
+          <div className="zari-card__media">
+            <Image src="/zari-macro.jpg?v=2" alt="Mysore silk zari detail" fill sizes="220px" />
           </div>
-
+          <div className="zari-card__copy">
+            <strong>
+              Experience
+              <br />
+              the Zari
+            </strong>
+            <span>Zoom into details</span>
+          </div>
+          <span className="zari-card__arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+        <div className="hero__stories">
           {miniStories.map((s) => (
             <div key={s.n} className="hero-story">
               <div className="hero-story__media">

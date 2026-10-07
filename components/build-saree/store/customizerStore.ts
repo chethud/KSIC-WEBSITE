@@ -150,6 +150,7 @@ export const useCustomizerStore = create<CustomizerStore>((set, get) => ({
         ...restored,
         step: 'colour',
         renderMode: 'webgl',
+        blouse: 'matching',
         color: restored.color ?? DEFAULT_CONFIGURATION.color,
         colorMode: restored.colorMode ?? 'single',
       });

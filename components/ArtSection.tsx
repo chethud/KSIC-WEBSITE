@@ -58,7 +58,7 @@ export default function ArtSection() {
         <video
           ref={videoRef}
           className="art__video"
-          src="/films/spliced.mp4?v=3"
+          src="/films/spliced.mp4?v=5"
           muted
           playsInline
           loop

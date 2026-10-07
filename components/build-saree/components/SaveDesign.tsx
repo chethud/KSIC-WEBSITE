@@ -5,6 +5,12 @@ export function SaveDesign() {
   const designName = useCustomizerStore((s) => s.designName);
   const setDesignName = useCustomizerStore((s) => s.setDesignName);
   const saveCurrentDesign = useCustomizerStore((s) => s.saveCurrentDesign);
+  const setCameraView = useCustomizerStore((s) => s.setCameraView);
+
+  const previewSaree = () => {
+    setCameraView('front');
+    document.querySelector('.viewer-stage')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   return (
     <div className="save-design">
@@ -17,9 +23,14 @@ export function SaveDesign() {
         onChange={(e) => setDesignName(e.target.value)}
         maxLength={40}
       />
-      <button type="button" className="secondary-cta" onClick={() => saveCurrentDesign()}>
-        Save Design
-      </button>
+      <div className="save-actions">
+        <button type="button" className="preview-cta" onClick={previewSaree}>
+          Preview
+        </button>
+        <button type="button" className="secondary-cta" onClick={() => saveCurrentDesign()}>
+          Save Design
+        </button>
+      </div>
       {designId && (
         <p className="design-id">
           ID <strong>{designId}</strong>

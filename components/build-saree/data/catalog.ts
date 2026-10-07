@@ -6,9 +6,8 @@ export const STEPS = [
   { id: 'colour' as const, label: 'Colour', number: '1' },
   { id: 'border' as const, label: 'Border', number: '2' },
   { id: 'pallu' as const, label: 'Pallu', number: '3' },
-  { id: 'blouse' as const, label: 'Blouse', number: '4' },
-  { id: 'zari' as const, label: 'Zari', number: '5' },
-  { id: 'finish' as const, label: 'Finish', number: '6' },
+  { id: 'zari' as const, label: 'Zari', number: '4' },
+  { id: 'finish' as const, label: 'Finish', number: '5' },
 ];
 
 export const COLOUR_CATEGORIES: { id: import('../types/customization').ColourCategory; label: string }[] = [
@@ -154,10 +153,10 @@ export const BORDER_COLORS: CatalogItem[] = [
 
 /** 4 pallu designs */
 export const PALLUS: CatalogItem[] = [
-  { id: 'royal', name: 'Royal', type: 'pallu', description: 'Opulent dense weave', priceAdjustment: 5500, texture: 'royal', mask: 'pallu-mask' },
-  { id: 'traditional', name: 'Traditional', type: 'pallu', description: 'Classic woven motifs', priceAdjustment: 2200, texture: 'traditional', mask: 'pallu-mask' },
-  { id: 'statement', name: 'Statement', type: 'pallu', description: 'Bold dramatic pallu', priceAdjustment: 4800, texture: 'statement', mask: 'pallu-mask' },
-  { id: 'minimal', name: 'Minimal', type: 'pallu', description: 'Quiet elegant finish', priceAdjustment: 900, texture: 'minimal', mask: 'pallu-mask' },
+  { id: 'royal', name: 'Royal Temple', type: 'pallu', description: 'Dense gold zari', fabricImage: '/models/pallu/royal.jpg?v=1', priceAdjustment: 5500, texture: 'royal', mask: 'pallu-mask' },
+  { id: 'traditional', name: 'Traditional Mysore', type: 'pallu', description: 'Classic motif', fabricImage: '/models/pallu/traditional.jpg?v=1', priceAdjustment: 2200, texture: 'traditional', mask: 'pallu-mask' },
+  { id: 'statement', name: 'Grand Zari', type: 'pallu', description: 'Rich traditional weave', fabricImage: '/models/pallu/statement.jpg?v=1', priceAdjustment: 4800, texture: 'statement', mask: 'pallu-mask' },
+  { id: 'minimal', name: 'Contemporary Minimal', type: 'pallu', description: 'Minimal border', fabricImage: '/models/pallu/minimal.jpg?v=1', priceAdjustment: 900, texture: 'minimal', mask: 'pallu-mask' },
 ];
 
 /** 5 blouse combinations */
@@ -214,9 +213,9 @@ export const ZARIS: CatalogItem[] = [
 
 /** 3 silk finishes */
 export const FINISHES: CatalogItem[] = [
-  { id: 'soft-silk', name: 'Soft Silk', type: 'finish', description: 'Gentle light catch', priceAdjustment: 800, roughness: 0.38, metalness: 0.04, sheen: 0.55 },
-  { id: 'rich-silk', name: 'Rich Silk', type: 'finish', description: 'Deep luminous body', priceAdjustment: 1800, roughness: 0.28, metalness: 0.06, sheen: 0.75 },
-  { id: 'lustrous-silk', name: 'Lustrous Silk', type: 'finish', description: 'Brilliant silk glow', priceAdjustment: 2500, roughness: 0.18, metalness: 0.08, sheen: 0.95 },
+  { id: 'soft-silk', name: 'Soft Silk', type: 'finish', description: 'Gentle light catch', fabricImage: '/models/finish/soft.jpg?v=1', priceAdjustment: 800, roughness: 0.38, metalness: 0.04, sheen: 0.55 },
+  { id: 'rich-silk', name: 'Rich Silk', type: 'finish', description: 'Deep luminous body', fabricImage: '/models/finish/rich.jpg?v=1', priceAdjustment: 1800, roughness: 0.28, metalness: 0.06, sheen: 0.75 },
+  { id: 'lustrous-silk', name: 'Lustrous Silk', type: 'finish', description: 'Brilliant silk glow', fabricImage: '/models/finish/lustrous.jpg?v=1', priceAdjustment: 2500, roughness: 0.18, metalness: 0.08, sheen: 0.95 },
 ];
 
 export const DEFAULT_CONFIGURATION: SareeConfiguration = {

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FINISHES } from '../../data/catalog';
 import { useCustomizerStore } from '../../store/customizerStore';
 
@@ -22,7 +23,11 @@ export function FinishSelector() {
               setCameraView('detail');
             }}
           >
-            <span className={`finish-preview finish-${f.id}`} />
+            <span className="finish-preview">
+              {f.fabricImage ? (
+                <Image src={f.fabricImage} alt="" fill sizes="46px" />
+              ) : null}
+            </span>
             <span>
               <strong>{f.name}</strong>
               <em>{f.description}</em>

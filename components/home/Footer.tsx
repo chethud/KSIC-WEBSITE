@@ -34,7 +34,7 @@ export default function Footer() {
             <p>Account</p>
             <Link href="/wishlist">Wishlist</Link>
             <Link href="/bag">Bag</Link>
-            <Link href="/account?tab=orders">My orders</Link>
+            <Link href="/orders">My orders</Link>
             <Link href="/account?tab=creations">Saved creations</Link>
           </div>
         </div>

@@ -9,7 +9,7 @@ export default function Heritage() {
       <figure className="heritage__image">
         <div className="media-fill">
           <Image
-            src="/generations.jpg?v=3"
+            src="/generations.jpg?v=4"
             alt="Three generations of women in Mysore silk"
             fill
             sizes="(max-width: 900px) 100vw, 42vw"

@@ -7,7 +7,6 @@ import { useCustomizerStore } from "../store/customizerStore";
 import { ColorSelector } from "./selectors/ColorSelector";
 import { BorderSelector } from "./selectors/BorderSelector";
 import { PalluSelector } from "./selectors/PalluSelector";
-import { BlouseSelector } from "./selectors/BlouseSelector";
 import { ZariSelector } from "./selectors/ZariSelector";
 import { FinishSelector } from "./selectors/FinishSelector";
 import { PriceSummary } from "./PriceSummary";
@@ -31,11 +30,6 @@ const STEP_ICONS: Record<(typeof STEPS)[number]["id"], ReactNode> = {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <path d="M7 4h10v16H7z" />
       <path d="M7 8h10M7 16h10" />
-    </svg>
-  ),
-  blouse: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M9 4h6l2 3 3 1v3l-3 1v8H7v-8l-3-1V8l3-1 2-3z" />
     </svg>
   ),
   zari: (
@@ -116,7 +110,6 @@ export function CustomizerPanel() {
             {step === "colour" && <ColorSelector />}
             {step === "border" && <BorderSelector />}
             {step === "pallu" && <PalluSelector />}
-            {step === "blouse" && <BlouseSelector />}
             {step === "zari" && <ZariSelector />}
             {step === "finish" && (
               <>
@@ -146,7 +139,7 @@ export function CustomizerPanel() {
 
         <div className="panel-footer-mid" aria-live="polite">
           <span className="panel-footer-count">
-            {stepIndex + 1}/{STEPS.length}
+            {stepIndex + 1} / {STEPS.length}
           </span>
           <span className="panel-footer-view">{viewLabel}</span>
         </div>

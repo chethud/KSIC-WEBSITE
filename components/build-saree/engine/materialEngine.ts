@@ -235,7 +235,6 @@ export function buildSummaryLines(config: SareeConfiguration): string[] {
     getLabel(COLORS, config.color),
     `${getLabel(BORDERS, config.border)} · ${getLabel(BORDER_COLORS, config.borderColor)}`,
     `${getLabel(PALLUS, config.pallu)} Pallu`,
-    `${getLabel(BLOUSES, config.blouse)} Blouse`,
     `${getLabel(ZARIS, config.zari)} Zari`,
     getLabel(FINISHES, config.finish),
   ];

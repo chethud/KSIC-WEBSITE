@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { readAccount, type Account } from "@/lib/account";
 import { bagUnits, readBag } from "@/lib/bag";
 import Emblem from "./Emblem";
@@ -33,6 +33,8 @@ export default function Header({ variant = "home", current }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [bagCount, setBagCount] = useState(0);
   const [account, setAccount] = useState<Account | null>(null);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
   const active = currentKey(current);
 
   useEffect(() => {
@@ -49,6 +51,22 @@ export default function Header({ variant = "home", current }: HeaderProps) {
       window.removeEventListener("storage", syncBag);
     };
   }, []);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+    const onPointer = (event: MouseEvent) => {
+      if (!accountRef.current?.contains(event.target as Node)) setAccountOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setAccountOpen(false);
+    };
+    document.addEventListener("mousedown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [accountOpen]);
 
   useEffect(() => {
     if (variant !== "home") {
@@ -98,12 +116,34 @@ export default function Header({ variant = "home", current }: HeaderProps) {
             </svg>
             {bagCount > 0 ? <span className="nav__bag-count">{bagCount}</span> : null}
           </Link>
-          <Link href="/account" className="icon-btn nav__desk" aria-label={account ? "Silk Vault" : "Account"}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="12" cy="8" r="3.2" />
-              <path d="M5.5 19c1.4-3.2 3.8-4.7 6.5-4.7s5.1 1.5 6.5 4.7" />
-            </svg>
-          </Link>
+          <div className="nav__account" ref={accountRef}>
+            <button
+              type="button"
+              className="icon-btn nav__desk"
+              aria-label="Account"
+              aria-haspopup="menu"
+              aria-expanded={accountOpen}
+              onClick={() => setAccountOpen((open) => !open)}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="8" r="3.2" />
+                <path d="M5.5 19c1.4-3.2 3.8-4.7 6.5-4.7s5.1 1.5 6.5 4.7" />
+              </svg>
+            </button>
+            {accountOpen ? (
+              <div className="nav__account-menu" role="menu">
+                <Link href="/account" role="menuitem" onClick={() => setAccountOpen(false)}>
+                  Profile
+                </Link>
+                <Link href="/orders" role="menuitem" onClick={() => setAccountOpen(false)}>
+                  Order history
+                </Link>
+                <Link href="/vault" role="menuitem" onClick={() => setAccountOpen(false)}>
+                  Vault
+                </Link>
+              </div>
+            ) : null}
+          </div>
           <button
             type="button"
             className="nav__menu"

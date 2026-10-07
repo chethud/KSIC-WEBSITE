@@ -85,6 +85,53 @@
   border: 1px solid rgba(36, 29, 24, 0.08);
   padding: 1.4rem 1.35rem 1.3rem;
 }
+.acct__order {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  align-items: center;
+}
+.acct__order-media {
+  position: relative;
+  grid-row: 1 / span 3;
+  width: 72px;
+  height: 96px;
+  overflow: hidden;
+  background: #f3eee4;
+}
+.acct__order h2 { margin-top: 0.2rem; }
+.acct__order-meta {
+  color: #756b60;
+  font-size: 0.95rem;
+  font-weight: 300;
+}
+.acct__order .acct__kicker { margin: 0; }
+.acct__order-price {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: #241d18;
+  font-weight: 500;
+}
+.acct__order a {
+  justify-self: start;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #241d18;
+  border-bottom: 1px solid rgba(36, 29, 24, 0.35);
+}
+@media (min-width: 700px) {
+  .acct__order {
+    grid-template-columns: 84px minmax(0, 1fr) auto auto;
+    gap: 1.25rem;
+  }
+  .acct__order-media {
+    grid-row: auto;
+    width: 84px;
+    height: 112px;
+  }
+  .acct__order a { justify-self: end; }
+}
 .acct__panel h2,
 .acct__vault-card h2 {
   margin-top: 0.45rem;

@@ -132,7 +132,7 @@ export function StudioBand() {
 export function CloseBand() {
   return (
     <section className="home-band" aria-label="Journal and Silk Vault">
-      <div className="home-band__inner ux-grid">
+      <div className="home-band__inner ux-grid ux-grid--3">
         <Link href="/journal" className="ux-card">
           <p className="ux-kicker">Journal</p>
           <h2>Read the loom&apos;s story</h2>

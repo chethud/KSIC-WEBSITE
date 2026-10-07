@@ -7,75 +7,75 @@ import { useEffect, useState } from "react";
 const panels = [
   {
     n: "01",
-    titleLines: ["A Royal", "Beginning"],
-    meta: "1912",
-    copyLines: ["A royal vision", "to create a silk", "unlike any other."],
+    titleLines: ["A Royal", "Vision"],
+    meta: "1912 · Born for the Palace",
+    copyLines: [],
     image: "/heritage/01.jpg?v=6",
     imageWide: "/heritage/01-wide.jpg?v=5",
     detail:
-      "In 1912, under the patronage of the Wadiyar dynasty, Mysore Silk was born as a royal commission — not merely cloth, but a standard of excellence. The house set out to weave a silk so pure and luminous that it would stand apart from every other tradition in India.",
+      "In 1912, Maharaja Nalwadi Krishnaraja Wadiyar IV established the Mysore silk weaving factory in Mysuru. His vision was to create silk of exceptional quality for the royal household and the ceremonial needs of the state. Swiss looms and preparatory machinery were brought to Mysuru, creating one of the earliest technologically advanced silk weaving operations of its kind in India. What began as a royal requirement would become a defining textile tradition of Karnataka.",
   },
   {
     n: "02",
-    titleLines: ["The Finest", "Silk"],
-    meta: "Selected",
-    copyLines: ["From the finest", "mulberry silkworms."],
+    titleLines: ["Before the Saree,", "the Silk"],
+    meta: "1785 · The First Thread",
+    copyLines: [],
     image: "/heritage/02.jpg?v=4",
     imageWide: "/heritage/02-wide.jpg?v=5",
     detail:
-      "Only the finest mulberry silk is chosen — long, continuous filaments with a natural sheen that cannot be imitated. Each skein is graded for strength, lustre, and hand-feel before it ever reaches the loom.",
+      "The story reaches further back than the 1912 factory. During the reign of Tipu Sultan, sericulture was introduced and developed in the Mysore kingdom; the Government of Mysuru dates the establishment of sericulture at Channapatna to 1785. Historical accounts describe silk expertise and silkworm cultivation being developed through connections with Bengal, laying the agricultural foundation on which Mysore’s later silk industry would grow.",
   },
   {
     n: "03",
-    titleLines: ["Skilled", "Artisans"],
-    meta: "In Mysuru",
-    copyLines: ["In the hands of", "master weavers."],
+    titleLines: ["Knowledge", "Became Craft"],
+    meta: "The Artisan",
+    copyLines: [],
     image: "/heritage/03.jpg?v=4",
     imageWide: "/heritage/03-wide.jpg?v=5",
     detail:
-      "In Mysuru’s weaving halls, master artisans carry techniques passed through generations. Their hands set the tension, place the zari, and give each saree its quiet authority — craft that no machine can fully reproduce.",
+      "Silk could not become a luxury without people who understood it. Mysore’s silk industry grew alongside organised technical training, including the Tata Silk Farm and training centre established in Bengaluru with Japanese expertise in the early 1900s. This exchange of knowledge helped build a generation of people skilled in sericulture, silk processing and weaving — and gave Mysore the technical foundation to pursue exceptional silk production.",
   },
   {
     n: "04",
-    titleLines: ["A Distinctive", "Sheen"],
-    meta: "Signature",
-    copyLines: ["A texture and lustre", "that sets it apart."],
+    titleLines: ["The Signature", "of Mysore"],
+    meta: "Silk · Silver · Gold",
+    copyLines: [],
     image: "/heritage/04.jpg?v=4",
     imageWide: "/heritage/04-wide.jpg?v=5",
     detail:
-      "Mysore Silk is recognised by its signature sheen — a soft, living lustre that shifts with light. The weave holds depth without heaviness, so the fabric drapes with grace and catches gold in every fold.",
+      "The character of Mysore Silk lies in restraint. Fine natural silk provides its smooth hand and luminous drape, while its distinctive zari brings the precious element. Traditional Mysore Silk zari is built predominantly with silver and a measured quantity of gold — the recognised specification is 65% pure silver and 0.65% gold, with the precious metal worked into the zari construction. The result is not loud ornamentation, but a quiet glow that changes beautifully with light.",
   },
   {
     n: "05",
-    titleLines: ["Adorned by", "Royalty"],
-    meta: "Cherished",
-    copyLines: ["Worn by queens,", "cherished by generations."],
+    titleLines: ["Woven for", "Royalty"],
+    meta: "A Silk Fit for Royalty",
+    copyLines: [],
     image: "/heritage/05.jpg?v=4",
     imageWide: "/heritage/05-wide.jpg?v=5",
     detail:
-      "From palace ceremonies to family milestones, Mysore Silk has dressed queens and been kept as heirloom. Each piece is meant to be worn, remembered, and passed on — a presence in the wardrobe of generations.",
+      "The earliest Mysore silk fabrics were created for the royal family and the state’s ceremonial needs. Silk became part of the visual language of the Wadiyar court. Its elegance was never about excess, but refinement, purity and presence. That royal character remains woven into every authentic Mysore Silk saree.",
   },
   {
     n: "06",
-    titleLines: ["Recognised", "Worldwide"],
-    meta: "Beyond Mysuru",
-    copyLines: ["From Mysuru", "to the world."],
+    titleLines: ["Mysuru to", "the World"],
+    meta: "A Name Recognised",
+    copyLines: [],
     image: "/heritage/06.jpg?v=3",
     imageWide: "/heritage/06.jpg?v=3",
     stagePosition: "center 18%",
     detail:
-      "What began in Mysuru is now recognised across continents. Collectors and connoisseurs seek the same purity of silk and precision of zari that once defined a royal atelier — heritage that travels without losing its origin.",
+      "Mysore Silk grew from a royal tradition into one of India’s most recognised silk identities. Its reputation is built on pure silk, distinctive sheen and precious zari. The Geographical Indication registered Mysore Silk as a protected regional identity. What began in Mysuru became a name admired far beyond Karnataka.",
   },
   {
     n: "07",
-    titleLines: ["A Timeless", "Legacy"],
-    meta: "Today",
-    copyLines: ["A saree that", "continues to inspire", "the world."],
+    titleLines: ["A Legacy", "That Endures"],
+    meta: "Made to Be Passed Down",
+    copyLines: [],
     image: "/heritage/07.jpg?v=3",
     imageWide: "/heritage/07.jpg?v=3",
     stagePosition: "center 18%",
     detail:
-      "Today the legacy continues — woven for the present, made to be inherited. Mysore Silk remains a living tradition: one saree, one story, still inspiring how beauty and craftsmanship endure.",
+      "More than a century later, the tradition continues through KSIC and its Mysuru manufacturing heritage. Authenticity, pure silk, precious zari and controlled craftsmanship remain at its heart. Every saree carries its own identity, protecting the name and the legacy behind it. That is why Mysore Silk remains one of India’s most prestigious silk traditions.",
   },
 ];
 
@@ -251,7 +251,9 @@ export default function HeritageJourney() {
             <span />
           </div>
 
-          <p className="hj__lead">{chapter.copyLines.join(" ")}</p>
+          {chapter.copyLines.length > 0 && (
+            <p className="hj__lead">{chapter.copyLines.join(" ")}</p>
+          )}
           <p className="hj__body">{chapter.detail}</p>
 
           <div className="hj__footer-nav" onClick={(e) => e.stopPropagation()}>
