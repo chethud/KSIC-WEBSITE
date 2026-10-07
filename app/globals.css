@@ -363,10 +363,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* HERO */
 .hero {
   position: relative;
-  height: 100vh;
-  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  min-height: 100svh;
   color: var(--warm);
-  overflow: hidden;
   background: var(--obsidian);
 }
 .hero__stage { position: absolute; inset: 0; }
@@ -391,7 +393,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__copy {
   position: relative; z-index: 2;
   max-width: 34rem;
-  padding: calc(var(--nav-h) + 7vh) var(--gutter) 30vh;
+  padding: calc(var(--nav-h) + 7vh) var(--gutter) 1.5rem;
   will-change: transform, opacity;
 }
 .hero__title {
@@ -474,12 +476,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .hero__bottom {
-  position: absolute;
-  left: var(--gutter); right: var(--gutter); bottom: 1.35rem;
+  position: relative;
   z-index: 3;
   display: grid;
   gap: 1rem;
   align-items: end;
+  flex: 0 0 auto;
+  margin: 0 var(--gutter) 1.35rem;
 }
 
 .zari-card {
@@ -1919,7 +1922,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .chapters { display: flex; }
   .hero__copy {
     padding-left: clamp(2.8rem, 7vw, 6.5rem);
-    padding-bottom: 32vh;
+    padding-bottom: 1.25rem;
   }
   .hero__bottom {
     grid-template-columns: 280px minmax(0, 1fr);
@@ -1972,7 +1975,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 @media (max-width: 899px) {
   .nav { grid-template-columns: 1fr auto; }
-  .hero__copy { padding-bottom: 38vh; }
+  .hero__copy { padding-bottom: 1.25rem; }
   .hero__stories {
     display: flex;
     overflow-x: auto;

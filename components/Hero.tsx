@@ -45,16 +45,21 @@ export default function Hero() {
     const onScroll = () => {
       const rect = hero.getBoundingClientRect();
       const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height, 1)));
-      if (copyRef.current) {
-        copyRef.current.style.opacity = String(1 - progress * 1.2);
-        copyRef.current.style.translate = `0 ${progress * 28}px`;
-      }
+      if (!copyRef.current) return;
+      copyRef.current.style.opacity = String(1 - progress * 1.2);
+      copyRef.current.style.translate = progress === 0 ? "" : `0 ${progress * 28}px`;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pageshow", onScroll);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pageshow", onScroll);
+      if (copyRef.current) {
+        copyRef.current.style.opacity = "";
+        copyRef.current.style.translate = "";
+      }
     };
   }, []);
 
