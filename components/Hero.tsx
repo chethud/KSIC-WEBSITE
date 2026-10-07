@@ -37,49 +37,18 @@ const miniStories = [
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const layerRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
-    hero.classList.add("is-settled");
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
-    let mx = 0;
-    let my = 0;
-    let cx = 0;
-    let cy = 0;
-    let raf = 0;
-
-    const onMove = (e: PointerEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-    };
-
-    const tick = () => {
-      cx += (mx - cx) * 0.06;
-      cy += (my - cy) * 0.06;
-      const rect = hero.getBoundingClientRect();
-      if (rect.bottom > 0 && rect.top < window.innerHeight && layerRef.current) {
-        const px = cx / window.innerWidth - 0.5;
-        const py = cy / window.innerHeight - 0.5;
-        layerRef.current.style.translate = `${px * -16}px ${py * -9}px`;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-
-    window.addEventListener("pointermove", onMove, { passive: true });
-    raf = requestAnimationFrame(tick);
-
     const onScroll = () => {
       const rect = hero.getBoundingClientRect();
       const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height, 1)));
-      if (layerRef.current) {
-        layerRef.current.style.scale = String(1 + progress * 0.05);
-      }
       if (copyRef.current) {
         copyRef.current.style.opacity = String(1 - progress * 1.2);
         copyRef.current.style.translate = `0 ${progress * 28}px`;
@@ -89,16 +58,14 @@ export default function Hero() {
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
-      window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
     };
   }, []);
 
   return (
     <section className="hero" id="hero" ref={heroRef}>
       <div className="hero__stage">
-        <div className="hero__layer" ref={layerRef}>
+        <div className="hero__layer">
           <div className="media-fill">
             <Image
               src="/hero-bg.png"

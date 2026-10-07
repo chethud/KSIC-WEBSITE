@@ -5,6 +5,7 @@ import type {
   SareeConfiguration,
 } from '../types/customization';
 import { DEFAULT_CONFIGURATION } from '../data/catalog';
+import { addBagItem } from '@/lib/bag';
 import {
   buildCartPayload,
   buildShareUrl,
@@ -105,12 +106,19 @@ export const useCustomizerStore = create<CustomizerStore>((set, get) => ({
 
   addToBag: () => {
     const payload = buildCartPayload(get());
+    addBagItem({
+      id: payload.designId,
+      name: payload.configuration.designName || 'Atelier saree',
+      detail: 'Composed in the atelier',
+      href: `/your-saree?design=${payload.designId}`,
+      image: '/pdp/ivory-silk.jpg',
+      price: payload.price,
+    });
     set({
       designId: payload.designId,
       bagCount: get().bagCount + 1,
       toast: 'Added to bag',
     });
-    // Handoff hook for existing commerce system
     window.dispatchEvent(
       new CustomEvent('ksic:add-to-bag', { detail: payload }),
     );

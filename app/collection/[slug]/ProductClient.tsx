@@ -52,6 +52,9 @@ export default function ProductClient({ product }: Props) {
       name={product.name}
       tagline={product.tagline}
       price={product.priceLabel}
+      priceAmount={product.price}
+      productId={product.slug}
+      productHref={`/collection/${product.slug}`}
       description={product.description}
       images={images}
       colors={MAHARAJA_PRODUCTS.map((item) => ({

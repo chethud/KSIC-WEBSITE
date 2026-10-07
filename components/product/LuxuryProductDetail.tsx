@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { addBagItem, parseInr } from "@/lib/bag";
 import "./luxury-detail.css";
 
 export type PdpCrumb = { href?: string; label: string };
@@ -21,6 +22,9 @@ type Props = {
   name: string;
   tagline: string;
   price: string;
+  priceAmount?: number;
+  productId?: string;
+  productHref?: string;
   description: string;
   images: PdpShot[];
   colors: PdpColor[];
@@ -36,6 +40,9 @@ export default function LuxuryProductDetail({
   name,
   tagline,
   price,
+  priceAmount,
+  productId,
+  productHref,
   description,
   images,
   colors,
@@ -177,7 +184,22 @@ export default function LuxuryProductDetail({
           </div>
 
           <div className="pdp__buy">
-            <button type="button" className="pdp__btn pdp__btn--gold" onClick={() => flash(`${name} added to cart`)}>
+            <button
+              type="button"
+              className="pdp__btn pdp__btn--gold"
+              onClick={() => {
+                const colour = colors.find((color) => color.id === activeColorId)?.label ?? "";
+                addBagItem({
+                  id: `${productId ?? name}-${activeColorId || "default"}`,
+                  name,
+                  detail: colour,
+                  href: productHref ?? "/sarees",
+                  image: images[0]?.src ?? "",
+                  price: priceAmount ?? parseInr(price),
+                });
+                flash(`${name} added to your bag`);
+              }}
+            >
               <BagIcon />
               Add to Cart
             </button>

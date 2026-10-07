@@ -54,6 +54,9 @@ export default function SareeDetail({ saree }: Props) {
       name={saree.name}
       tagline={saree.description}
       price={`₹ ${saree.price.toLocaleString("en-IN")}`}
+      priceAmount={saree.price}
+      productId={saree.id}
+      productHref={`/sarees/${saree.id}`}
       description={saree.story}
       images={images}
       colors={saree.swatches.map((item) => ({

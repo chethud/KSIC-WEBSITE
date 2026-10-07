@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { bagUnits, readBag } from "@/lib/bag";
 import Emblem from "./Emblem";
 
 type HeaderProps = {
@@ -21,6 +22,18 @@ export default function Header({ variant = "home", current }: HeaderProps) {
   const [scrolled, setScrolled] = useState(variant === "atelier" || variant === "heritage");
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [bagCount, setBagCount] = useState(0);
+
+  useEffect(() => {
+    const sync = () => setBagCount(bagUnits(readBag()));
+    sync();
+    window.addEventListener("ksic:bag-changed", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("ksic:bag-changed", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
 
   const links = homeLinks;
   const variantClass =
@@ -80,12 +93,13 @@ export default function Header({ variant = "home", current }: HeaderProps) {
               <path d="M5.5 19c1.4-3.2 3.8-4.7 6.5-4.7s5.1 1.5 6.5 4.7" />
             </svg>
           </Link>
-          <button type="button" className="icon-btn" aria-label="Bag">
+          <Link href="/bag" className="icon-btn" aria-label={bagCount ? `Bag, ${bagCount} items` : "Bag"}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6.5 7.5h11l-.9 11.2H7.4L6.5 7.5z" />
               <path d="M9 7.5V6.4a3 3 0 0 1 6 0v1.1" />
             </svg>
-          </button>
+            {bagCount > 0 ? <span className="nav__bag-count">{bagCount}</span> : null}
+          </Link>
           <button
             type="button"
             className="nav__menu"
