@@ -4,9 +4,9 @@ import VaultClient from "./VaultClient";
 import "./vault.css";
 
 export const metadata: Metadata = {
-  title: "My Vault — Virtual Closet | Mysore Silk",
+  title: "Studio closet — Mysore Silk",
   description:
-    "Your KSIC virtual closet — browse owned heirloom sarees and liked pieces in interactive 3D.",
+    "Explore house silks in 3D. Purchased sarees live in Silk Vault only after an order is completed.",
 };
 
 export default function VaultPage() {

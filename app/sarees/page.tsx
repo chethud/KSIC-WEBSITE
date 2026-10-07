@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Header from "@/components/Header";
 import SareeCollection from "@/components/sarees/SareeCollection";
 
@@ -13,7 +14,9 @@ export default function SareesPage() {
     <>
       <Header variant="atelier" current="sarees" />
       <main>
-        <SareeCollection />
+        <Suspense fallback={<p className="ux-empty">Opening the collection…</p>}>
+          <SareeCollection />
+        </Suspense>
       </main>
     </>
   );

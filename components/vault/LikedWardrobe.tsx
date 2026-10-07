@@ -35,9 +35,9 @@ export const LikedWardrobe: React.FC<LikedWardrobeProps> = ({
       {/* Architectural Arched Header */}
       <div className="wardrobe-header">
         <div className="wardrobe-header-text">
-          <h2 className="wardrobe-title">Liked Products</h2>
+          <h2 className="wardrobe-title">Set aside</h2>
           <span className="wardrobe-meta">
-            Saved for later · {String(products.length).padStart(2, '0')}
+            Studio only · {String(products.length).padStart(2, '0')}
           </span>
         </div>
 

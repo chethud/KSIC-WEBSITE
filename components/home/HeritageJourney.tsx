@@ -10,7 +10,7 @@ const panels = [
     titleLines: ["A Royal", "Beginning"],
     meta: "1912",
     copyLines: ["A royal vision", "to create a silk", "unlike any other."],
-    image: "/heritage/01.jpg?v=4",
+    image: "/heritage/01.jpg?v=6",
     imageWide: "/heritage/01-wide.jpg?v=5",
     detail:
       "In 1912, under the patronage of the Wadiyar dynasty, Mysore Silk was born as a royal commission — not merely cloth, but a standard of excellence. The house set out to weave a silk so pure and luminous that it would stand apart from every other tradition in India.",
@@ -96,6 +96,13 @@ export default function HeritageJourney() {
 
   const showAll = () => setOpened(false);
 
+  useEffect(() => {
+    const requested = Number(new URLSearchParams(window.location.search).get("chapter"));
+    if (requested >= 1 && requested <= panels.length) openChapter(requested - 1);
+    // Open a journal chapter once, from the URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const prev = () => openChapter(active - 1);
   const next = () => openChapter(active + 1);
 
@@ -130,7 +137,7 @@ export default function HeritageJourney() {
               onClick={() => openChapter(i)}
               aria-label={`Open chapter ${panel.n}: ${panel.titleLines.join(" ")}`}
             >
-              <Image src={panel.image} alt="" fill sizes="15vw" className="hj__seven-img" />
+              <Image src={panel.image} alt="" fill sizes="(max-width: 899px) 78vw, 15vw" quality={90} className="hj__seven-img" />
               <span className="hj__seven-copy">
                 <span className="hj__seven-n">{panel.n}</span>
                 <strong>{panel.titleLines.join(" ")}</strong>

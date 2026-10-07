@@ -176,14 +176,39 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   gap: 1rem;
   padding: 0.85rem var(--gutter);
   color: #f7f1e6;
-  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  background: transparent;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
   border-bottom: 1px solid transparent;
 }
-.nav.is-hidden { transform: translateY(-110%); }
 .nav.is-scrolled {
-  background: rgba(10, 8, 6, 0.88);
-  backdrop-filter: blur(16px);
-  border-bottom-color: rgba(183, 154, 104, 0.12);
+  background: #ffffff;
+  color: #1b1917;
+  border-bottom-color: rgba(27, 25, 23, 0.08);
+}
+.nav.is-scrolled .nav__links a {
+  color: #5e584f;
+  opacity: 1;
+}
+.nav.is-scrolled .nav__links a:hover,
+.nav.is-scrolled .nav__links a.is-current {
+  color: #741426;
+}
+.nav.is-scrolled .nav__links a::after {
+  background: #b19563;
+}
+.nav.is-scrolled .icon-btn,
+.nav.is-scrolled .nav__text {
+  color: #1b1917;
+}
+.nav.is-scrolled .icon-btn:hover,
+.nav.is-scrolled .nav__text:hover {
+  color: #741426;
+}
+.nav.is-scrolled .nav__divider {
+  background: rgba(27, 25, 23, 0.16);
+}
+.nav.is-scrolled .brand-logo__img {
+  filter: none;
 }
 .nav--atelier {
   background: rgba(244, 240, 231, 0.92);
@@ -438,19 +463,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .zari-card {
   display: grid;
-  grid-template-columns: 56px 1fr auto;
+  grid-template-columns: 56px minmax(0, 1fr);
   gap: 0.55rem;
   align-items: center;
-  width: min(100%, 200px);
-  padding: 0.35rem;
-  border: 1px solid rgba(247, 242, 233, 0.22);
-  background: rgba(10, 8, 6, 0.42);
-  backdrop-filter: blur(10px);
-  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-.zari-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-2px);
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0.45rem 0.35rem;
+  border-top: 1px solid rgba(247, 242, 233, 0.18);
+  cursor: default;
 }
 .zari-card__media {
   position: relative;
@@ -458,8 +479,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   overflow: hidden;
   flex-shrink: 0;
 }
-.zari-card__media img { transition: transform 1.1s var(--ease); }
-.zari-card:hover .zari-card__media img { transform: scale(1.08); }
 .zari-card__copy strong {
   display: block;
   font-family: var(--font-display);
@@ -476,44 +495,29 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-transform: uppercase;
   color: rgba(247, 242, 233, 0.65);
 }
-.zari-card__arrow {
-  width: 1.45rem; height: 1.45rem;
-  border: 1px solid rgba(247, 242, 233, 0.35);
-  border-radius: 50%;
-  display: grid; place-items: center;
-  font-size: 0.7rem;
-  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
-}
-.zari-card:hover .zari-card__arrow {
-  transform: translateX(2px);
-  border-color: var(--gold);
-}
 
 .hero__stories {
   display: none;
   gap: 0.75rem;
+  align-items: stretch;
 }
 .hero-story {
   display: grid;
-  grid-template-columns: 56px 1fr;
+  grid-template-columns: 56px minmax(0, 1fr);
   gap: 0.65rem;
   align-items: center;
-  min-width: 170px;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
   padding: 0.45rem 0.35rem;
   border-top: 1px solid rgba(247, 242, 233, 0.18);
-  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-.hero-story:hover {
-  border-color: var(--gold);
-  transform: translateY(-2px);
+  cursor: default;
 }
 .hero-story__media {
   position: relative;
   width: 56px; height: 56px;
   overflow: hidden;
 }
-.hero-story__media img { transition: transform 1.1s var(--ease); }
-.hero-story:hover .hero-story__media img { transform: scale(1.08); }
 .hero-story span {
   font-size: 0.58rem;
   letter-spacing: 0.14em;
@@ -529,59 +533,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: 0.68rem;
   color: rgba(247, 242, 233, 0.65);
   line-height: 1.35;
-}
-
-.hero__aside {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  justify-self: start;
-}
-.watch-story {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--warm);
-}
-.watch-story__play {
-  width: 3.2rem; height: 3.2rem;
-  border: 1px solid rgba(247, 242, 233, 0.45);
-  border-radius: 50%;
-  display: grid; place-items: center;
-  font-size: 0.75rem;
-  transition: border-color 500ms var(--ease), color 500ms var(--ease);
-}
-.watch-story:hover .watch-story__play {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-.watch-story span:last-child {
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  text-align: left;
-  line-height: 1.35;
-}
-
-.scroll-cue {
-  width: 2.6rem; height: 2.6rem;
-  border: 1px solid rgba(247, 242, 233, 0.35);
-  border-radius: 50%;
-  display: grid; place-items: center;
-  transition: border-color 500ms var(--ease);
-}
-.scroll-cue span {
-  width: 0.45rem; height: 0.45rem;
-  border-right: 1px solid currentColor;
-  border-bottom: 1px solid currentColor;
-  transform: rotate(45deg) translateY(-2px);
-  animation: cue-bounce 2.2s var(--ease) infinite;
-}
-.scroll-cue:hover { border-color: var(--gold); color: var(--gold); }
-
-@keyframes cue-bounce {
-  0%, 100% { transform: rotate(45deg) translateY(-3px); opacity: 0.55; }
-  50% { transform: rotate(45deg) translateY(2px); opacity: 1; }
 }
 
 .video-modal {
@@ -746,7 +697,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* MAHARAJA COLLECTION */
 .maharaja {
   background: #f9f7f2;
-  padding: clamp(4.5rem, 10vh, 7.5rem) 0 clamp(4rem, 8vh, 6rem);
+  padding: clamp(2.25rem, 4.5vh, 3.25rem) 0 clamp(2rem, 3.5vh, 2.75rem);
   color: #14110e;
 }
 .maharaja__inner {
@@ -760,7 +711,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   gap: 2rem;
   align-items: flex-end;
   flex-wrap: wrap;
-  margin-bottom: clamp(2.25rem, 4vw, 3.25rem);
+  margin-bottom: clamp(1.25rem, 2.2vw, 1.75rem);
 }
 .maharaja__intro {
   max-width: 36rem;
@@ -772,7 +723,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #9a8f7e;
-  margin-bottom: 1rem;
+  margin-bottom: 0.55rem;
 }
 .maharaja__title {
   font-family: var(--font-display);
@@ -783,7 +734,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: #14110e;
 }
 .maharaja__lead {
-  margin-top: 0.85rem;
+  margin-top: 0.5rem;
   color: #6e665c;
   max-width: 26rem;
   font-size: 0.95rem;
@@ -860,10 +811,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .maharaja__media {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 5 / 4;
   overflow: hidden;
   background: #ebe4d8;
-  margin-bottom: 1.05rem;
+  margin-bottom: 0.7rem;
 }
 .maharaja__media img {
   object-fit: cover;
@@ -883,7 +834,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   line-height: 1.35;
 }
 .maharaja__meta p {
-  margin-top: 0.35rem;
+  margin-top: 0.2rem;
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -892,7 +843,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .maharaja__meta span {
   display: block;
-  margin-top: 0.55rem;
+  margin-top: 0.3rem;
   font-size: 0.88rem;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -1295,7 +1246,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 88vh;
+  min-height: 0;
   background: #0a0806;
   color: var(--warm);
   overflow: hidden;
@@ -1314,7 +1265,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .heritage__image {
   position: relative;
   z-index: 1;
-  min-height: 62vh;
+  min-height: 420px;
   overflow: hidden;
 }
 .heritage__image .media-fill img {
@@ -1330,7 +1281,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   z-index: 1;
   display: grid;
   align-items: center;
-  min-height: 58vh;
+  min-height: 0;
   overflow: visible;
 }
 .heritage__copy {
@@ -1934,11 +1885,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     padding-bottom: 32vh;
   }
   .hero__bottom {
-    grid-template-columns: 280px 1fr auto;
+    grid-template-columns: minmax(0, 1fr);
     align-items: end;
   }
-  .hero__stories { display: grid; grid-template-columns: repeat(4, 1fr); }
-  .hero__aside { justify-self: end; }
+  .hero__stories { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
   .art { grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); min-height: 88vh; }
   .art__film { min-height: 100%; }
@@ -1954,7 +1904,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
   .heritage {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    min-height: 92vh;
+    height: 540px;
+    min-height: 540px;
     align-items: stretch;
   }
   .heritage__image,
@@ -1988,7 +1939,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     scrollbar-width: none;
   }
   .hero__stories::-webkit-scrollbar { display: none; }
-  .hero-story { min-width: 200px; }
+  .hero__stories > .hero-story,
+  .hero__stories > .zari-card {
+    flex: 0 0 11.5rem;
+    width: 11.5rem;
+    min-height: 6.125rem;
+  }
   .maharaja__arrows { display: none; }
   .categories {
     display: flex;
@@ -2091,6 +2047,35 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   opacity: 0.55;
   cursor: not-allowed;
 }
+.profile__signin {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 24rem;
+  margin-top: 1.5rem;
+}
+.profile__signin label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9a8f7e;
+}
+.profile__signin input {
+  border: 1px solid rgba(20, 17, 14, 0.16);
+  background: #fff;
+  color: #14110e;
+  padding: 0.8rem 0.85rem;
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.profile__signin p {
+  color: #8c3a32;
+  font-size: 0.9rem;
+}
+.profile__signin .profile__btn { width: fit-content; }
 .profile__identity {
   justify-self: start;
   width: min(100%, 16.5rem);

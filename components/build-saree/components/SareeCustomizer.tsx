@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { useSearchParams } from "next/navigation";
+import { getSaree } from "@/lib/saree-catalog";
+import { MAHARAJA_PRODUCTS } from "@/lib/maharaja-products";
 import { CustomizerPanel } from "./CustomizerPanel";
 import { SareeViewer } from "./viewer/SareeViewer";
 import { RegionAssignBar } from "./viewer/RegionAssignBar";
@@ -20,7 +23,14 @@ function useAssignApi() {
 }
 
 export function SareeCustomizer() {
+  const params = useSearchParams();
+  const silkId = params.get("silk");
+  const silkName =
+    (silkId && getSaree(silkId)?.name) ||
+    MAHARAJA_PRODUCTS.find((item) => item.slug === silkId)?.name ||
+    "";
   const bootstrap = useCustomizerStore((s) => s.bootstrap);
+  const saveCurrentDesign = useCustomizerStore((s) => s.saveCurrentDesign);
   const toast = useCustomizerStore((s) => s.toast);
   const clearToast = useCustomizerStore((s) => s.clearToast);
   const modelEditMode = useCustomizerStore((s) => s.modelEditMode);
@@ -38,6 +48,12 @@ export function SareeCustomizer() {
   }, [bootstrap]);
 
   useEffect(() => {
+    const resume = () => saveCurrentDesign();
+    window.addEventListener("ksic:resume-save", resume);
+    return () => window.removeEventListener("ksic:resume-save", resume);
+  }, [saveCurrentDesign]);
+
+  useEffect(() => {
     if (!toast) return;
     const t = setTimeout(clearToast, 2800);
     return () => clearTimeout(t);
@@ -51,6 +67,12 @@ export function SareeCustomizer() {
     <div className={`studio-page${modelEditMode ? " is-model-editing" : ""}`}>
       <main className="atelier-layout">
         <section className="viewer-stage" aria-label="Saree preview">
+          {silkName ? (
+            <p className="studio-context">
+              <strong>{silkName}</strong>
+              The studio shows the house model, not this saree&apos;s woven photograph. Colour and zari changes apply here.
+            </p>
+          ) : null}
           <div className="viewer-atmosphere" aria-hidden />
           <div className="viewer-glow" aria-hidden />
           {!modelEditMode ? (

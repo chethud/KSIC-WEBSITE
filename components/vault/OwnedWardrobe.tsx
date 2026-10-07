@@ -30,14 +30,14 @@ export const OwnedWardrobe: React.FC<OwnedWardrobeProps> = ({
   return (
     <aside 
       className="wardrobe-cabinet owned-closet" 
-      aria-label="My Closet - Owned Heirloom Sarees"
+      aria-label="House silks to explore in the studio"
     >
       {/* Architectural Arched Header */}
       <div className="wardrobe-header">
         <div className="wardrobe-header-text">
-          <h2 className="wardrobe-title">My Closet</h2>
+          <h2 className="wardrobe-title">House silks</h2>
           <span className="wardrobe-meta">
-            Owned · {String(products.length).padStart(2, '0')}
+            Explore · {String(products.length).padStart(2, '0')}
           </span>
         </div>
 

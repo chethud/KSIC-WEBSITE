@@ -49,6 +49,16 @@ export function loadDesign(designId: string): SavedDesign | null {
   return readAll()[designId] ?? null;
 }
 
+export function listDesigns(): SavedDesign[] {
+  return Object.values(readAll()).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+
+export function deleteDesign(designId: string) {
+  const all = readAll();
+  delete all[designId];
+  writeAll(all);
+}
+
 export function encodeConfig(config: SareeConfiguration): string {
   const payload = {
     colorMode: config.colorMode,

@@ -5,7 +5,8 @@ import type {
   SareeConfiguration,
 } from '../types/customization';
 import { DEFAULT_CONFIGURATION } from '../data/catalog';
-import { addBagItem } from '@/lib/bag';
+import { readAccount } from '@/lib/account';
+import { beginIntent } from '@/lib/intent';
 import {
   buildCartPayload,
   buildShareUrl,
@@ -90,6 +91,10 @@ export const useCustomizerStore = create<CustomizerStore>((set, get) => ({
   setDesignName: (designName) => set({ designName }),
 
   saveCurrentDesign: () => {
+    if (!readAccount()) {
+      beginIntent({ type: "save-creation", next: `${window.location.pathname}${window.location.search}` });
+      return "";
+    }
     const record = saveDesign(get());
     set({ designId: record.designId, toast: `Saved as ${record.designId}` });
     return record.designId;
@@ -106,22 +111,22 @@ export const useCustomizerStore = create<CustomizerStore>((set, get) => ({
 
   addToBag: () => {
     const payload = buildCartPayload(get());
-    addBagItem({
+    const item = {
       id: payload.designId,
-      name: payload.configuration.designName || 'Atelier saree',
-      detail: 'Composed in the atelier',
+      name: payload.configuration.designName || "Atelier saree",
+      detail: "Composed in the atelier",
       href: `/your-saree?design=${payload.designId}`,
-      image: '/pdp/ivory-silk.jpg',
+      image: "/pdp/ivory-silk.jpg",
       price: payload.price,
-    });
+    };
+    const ran = beginIntent({ type: "add-bag", next: "/bag", item });
+    if (!ran) return;
     set({
       designId: payload.designId,
       bagCount: get().bagCount + 1,
-      toast: 'Added to bag',
+      toast: "Added to bag",
     });
-    window.dispatchEvent(
-      new CustomEvent('ksic:add-to-bag', { detail: payload }),
-    );
+    window.dispatchEvent(new CustomEvent("ksic:add-to-bag", { detail: payload }));
   },
 
   clearToast: () => set({ toast: null }),

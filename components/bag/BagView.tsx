@@ -12,6 +12,7 @@ import {
   setBagQty,
   type BagItem,
 } from "@/lib/bag";
+import { beginIntent } from "@/lib/intent";
 
 export default function BagView() {
   const [items, setItems] = useState<BagItem[]>([]);
@@ -106,11 +107,15 @@ export default function BagView() {
               <span>Total</span>
               <strong>{formatInr(total)}</strong>
             </p>
-            <p className="bag__note">Inclusive of taxes. A demonstration bag until checkout opens.</p>
+            <p className="bag__note">Sign-in is required at checkout. Payment is not connected, so an order is not placed from this bag.</p>
             <button
               type="button"
               className="bag__btn bag__btn--gold"
-              onClick={() => setNotice("Checkout is not open yet. Your pieces stay saved in this bag.")}
+              onClick={() => {
+                const ran = beginIntent({ type: "checkout", next: "/checkout" });
+                if (ran) window.location.assign("/checkout");
+                else setNotice(null);
+              }}
             >
               Proceed to checkout
             </button>

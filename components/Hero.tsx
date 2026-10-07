@@ -10,28 +10,24 @@ const miniStories = [
     title: "The Silk",
     copy: "Pure. Rare. Enduring.",
     image: "/silk-threads.jpg",
-    href: "#silk",
   },
   {
     n: "02",
     title: "The Zari",
     copy: "Gold & Silver in every thread.",
     image: "/gold-thread.jpg",
-    href: "#silk",
   },
   {
     n: "03",
     title: "The Weave",
     copy: "A tradition of mastery.",
     image: "/loom-craft.jpg",
-    href: "#categories",
   },
   {
     n: "04",
     title: "The Heirloom",
     copy: "Meant for generations.",
     image: "/heirloom.jpg",
-    href: "#heritage",
   },
 ];
 
@@ -92,58 +88,44 @@ export default function Hero() {
           <br />
           Passed to tomorrow.
         </p>
-        <a className="btn btn--outline" href="#collection">
-          Explore the Collection <span aria-hidden="true">→</span>
-        </a>
+        <div className="hero__ctas">
+          <Link className="btn btn--outline" href="/sarees">
+            Explore silk <span aria-hidden="true">→</span>
+          </Link>
+          <Link className="btn btn--gold" href="/your-saree">
+            Enter 3D studio
+          </Link>
+        </div>
       </div>
 
       <div className="hero__bottom">
-        <a href="#silk" className="zari-card">
-          <div className="zari-card__media">
-            <Image src="/zari-macro.jpg?v=2" alt="Mysore silk zari detail" fill sizes="56px" />
-          </div>
-          <div className="zari-card__copy">
-            <strong>
-              Experience
-              <br />
-              the Zari
-            </strong>
-            <span>Zoom into details</span>
-          </div>
-          <span className="zari-card__arrow" aria-hidden="true">
-            →
-          </span>
-        </a>
-
         <div className="hero__stories">
+          <div className="zari-card">
+            <div className="zari-card__media">
+              <Image src="/zari-macro.jpg?v=2" alt="Mysore silk zari detail" fill sizes="56px" />
+            </div>
+            <div className="zari-card__copy">
+              <strong>
+                Experience
+                <br />
+                the Zari
+              </strong>
+              <span>Zoom into details</span>
+            </div>
+          </div>
+
           {miniStories.map((s) => (
-            <a key={s.n} href={s.href} className="hero-story">
+            <div key={s.n} className="hero-story">
               <div className="hero-story__media">
-                <Image src={s.image} alt={s.title} fill sizes="90px" />
+                <Image src={s.image} alt="" fill sizes="90px" />
               </div>
               <div>
                 <span>{s.n}</span>
                 <h3>{s.title}</h3>
                 <p>{s.copy}</p>
               </div>
-            </a>
+            </div>
           ))}
-        </div>
-
-        <div className="hero__aside">
-          <Link href="/heritage" className="watch-story">
-            <span className="watch-story__play" aria-hidden="true">
-              ▶
-            </span>
-            <span>
-              Watch
-              <br />
-              Our Story
-            </span>
-          </Link>
-          <a href="#silk" className="scroll-cue" aria-label="Scroll to The Silk">
-            <span />
-          </a>
         </div>
       </div>
     </section>

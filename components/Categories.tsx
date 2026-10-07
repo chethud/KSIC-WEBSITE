@@ -1,31 +1,35 @@
 import Image from "next/image";
+import Link from "next/link";
 
-const categories = [
-  {
-    title: "Sarees",
-    copy: "The heart\nof our house",
-    image: "/cat-sarees.jpg?v=2",
-    alt: "Woman wearing a Mysore silk saree",
-  },
+const occasions = [
   {
     title: "Bridal",
-    copy: "Ceremonial silk\nfor forever.",
+    copy: "Sarees marked\nfor the wedding day.",
     image: "/cat-bridal.jpg",
     alt: "Bridal Mysore silk saree with gold zari",
+    href: "/sarees?category=bridal",
   },
   {
-    title: "Accessories",
-    copy: "A touch\nof heritage",
+    title: "Ceremonial",
+    copy: "Temple borders\nfor ceremony.",
+    image: "/cat-sarees.jpg?v=2",
+    alt: "Woman wearing a Mysore silk saree",
+    href: "/sarees?category=temple",
+  },
+  {
+    title: "Everyday luxury",
+    copy: "Quieter colour,\nsame loom.",
     image: "/gold-thread.jpg",
-    alt: "Premium silk accessories and fabric detail",
+    alt: "Gold zari on Mysore silk",
+    href: "/sarees?category=pastel",
   },
 ];
 
 export default function Categories() {
   return (
-    <section className="categories" id="categories" aria-label="Shop by category">
-      {categories.map((cat) => (
-        <a key={cat.title} className="cat" href="#collection">
+    <section className="categories" id="categories" aria-label="Shop by occasion">
+      {occasions.map((cat) => (
+        <Link key={cat.title} className="cat" href={cat.href}>
           <div className="media-fill">
             <Image src={cat.image} alt={cat.alt} fill sizes="(max-width: 900px) 100vw, 33vw" />
           </div>
@@ -40,10 +44,10 @@ export default function Categories() {
               ))}
             </p>
             <span className="cat__cta">
-              Explore <span aria-hidden="true">→</span>
+              Explore collection <span aria-hidden="true">→</span>
             </span>
           </div>
-        </a>
+        </Link>
       ))}
     </section>
   );

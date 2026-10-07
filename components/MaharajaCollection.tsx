@@ -27,7 +27,7 @@ export default function MaharajaCollection() {
             </p>
           </div>
           <div className="maharaja__controls">
-            <Link href="/collection/royal-blue" className="maharaja__view-all">
+            <Link href="/collections" className="maharaja__view-all">
               View All <span aria-hidden="true">→</span>
             </Link>
             <div className="maharaja__arrows">

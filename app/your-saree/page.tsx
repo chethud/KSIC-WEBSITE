@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import YourSareeClient from "./YourSareeClient";
 
 export const metadata: Metadata = {
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function YourSareePage() {
-  return <YourSareeClient />;
+  return (
+    <Suspense fallback={null}>
+      <YourSareeClient />
+    </Suspense>
+  );
 }

@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { SAREES, type SareeCategory } from "@/lib/saree-catalog";
+import { beginIntent } from "@/lib/intent";
+import { isWished, removeWish } from "@/lib/wishlist";
 import "./saree-collection.css";
 
 type Category = SareeCategory;
@@ -28,11 +31,27 @@ function formatPrice(value: number) {
 }
 
 export default function SareeCollection() {
+  const params = useSearchParams();
+  const requested = params.get("category");
   const [category, setCategory] = useState<Category>("all");
   const [sort, setSort] = useState<SortKey>("featured");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [saved, setSaved] = useState<Record<string, boolean>>({});
   const [colorById, setColorById] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (requested && CATEGORIES.some((cat) => cat.id === requested)) {
+      setCategory(requested as Category);
+    }
+  }, [requested]);
+
+  useEffect(() => {
+    const next: Record<string, boolean> = {};
+    SAREES.forEach((saree) => {
+      if (isWished(saree.id)) next[saree.id] = true;
+    });
+    setSaved(next);
+  }, []);
 
   const items = useMemo(() => {
     const filtered =
@@ -169,9 +188,26 @@ export default function SareeCollection() {
                       className={`saree-card__heart${liked ? " is-saved" : ""}`}
                       aria-pressed={liked}
                       aria-label={liked ? `Remove ${saree.name} from saved` : `Save ${saree.name}`}
-                      onClick={() =>
-                        setSaved((prev) => ({ ...prev, [saree.id]: !prev[saree.id] }))
-                      }
+                      onClick={() => {
+                        if (liked) {
+                          removeWish(saree.id);
+                          setSaved((prev) => ({ ...prev, [saree.id]: false }));
+                          return;
+                        }
+                        const ran = beginIntent({
+                          type: "wishlist",
+                          next: "/wishlist",
+                          item: {
+                            id: saree.id,
+                            name: saree.name,
+                            href: `/sarees/${saree.id}`,
+                            image: photo,
+                            price: saree.price,
+                            code: saree.code,
+                          },
+                        });
+                        if (ran) setSaved((prev) => ({ ...prev, [saree.id]: true }));
+                      }}
                     >
                       <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.8C19 15.6 12 20 12 20Z" />
@@ -184,6 +220,7 @@ export default function SareeCollection() {
 
                   <div className="saree-card__info">
                     <h2>{saree.name}</h2>
+                    <p>{saree.code}</p>
                     <p>{saree.description}</p>
                     <p className="saree-card__price">{formatPrice(saree.price)}</p>
                     <div className="saree-card__swatches" role="listbox" aria-label={`${saree.name} colours`}>

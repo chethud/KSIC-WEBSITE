@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
+import AuthDialog from "@/components/auth/AuthDialog";
 import "./globals.css";
+import "./ux.css";
 
 const display = Cormorant_Garamond({
   subsets: ["latin"],
@@ -30,7 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <AuthDialog />
+      </body>
     </html>
   );
 }

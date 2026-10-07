@@ -4,6 +4,8 @@ import ArtSection from "@/components/ArtSection";
 import Categories from "@/components/Categories";
 import MaharajaCollection from "@/components/MaharajaCollection";
 import Heritage from "@/components/Heritage";
+import Footer from "@/components/home/Footer";
+import { CloseBand, StudioBand } from "@/components/home/HomeBands";
 
 export default function HomePage() {
   return (
@@ -12,10 +14,13 @@ export default function HomePage() {
       <main id="top">
         <Hero />
         <ArtSection />
+        <StudioBand />
         <Categories />
         <MaharajaCollection />
         <Heritage />
+        <CloseBand />
       </main>
+      <Footer />
     </>
   );
 }

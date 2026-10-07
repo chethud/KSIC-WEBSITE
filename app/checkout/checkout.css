@@ -1,0 +1,179 @@
+.checkout {
+  background: #f6f1e8;
+  color: #2a241c;
+  min-height: 100vh;
+  padding: calc(var(--nav-h) + 2.4rem) clamp(1.4rem, 4vw, 4.5rem) 4.5rem;
+}
+.checkout__inner { max-width: 1440px; margin: 0 auto; }
+.checkout__kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #9a8f7e;
+  margin-bottom: 0.75rem;
+}
+.checkout h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+.checkout__lead {
+  max-width: 34rem;
+  margin-top: 0.85rem;
+  color: #6e665c;
+  font-weight: 300;
+  line-height: 1.65;
+}
+.checkout__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.4rem;
+  margin: 1.6rem 0 2rem;
+  padding: 0 0 1.2rem;
+  border-bottom: 1px solid rgba(42, 36, 28, 0.12);
+}
+.checkout__steps li {
+  list-style: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8a7f72;
+}
+.checkout__steps strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #2a241c;
+}
+.checkout__layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+.checkout__panel,
+.checkout__summary {
+  background: #fffdf8;
+  border: 1px solid rgba(42, 36, 28, 0.08);
+}
+.checkout__panel { padding: 1.35rem 1.3rem 1.45rem; }
+.checkout__panel + .checkout__panel { margin-top: 0.85rem; }
+.checkout__panel h2,
+.checkout__summary h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.85rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.checkout__panel p,
+.checkout__summary p { color: #6e665c; line-height: 1.6; font-weight: 300; }
+.checkout__panel a { border-bottom: 1px solid rgba(116, 20, 38, 0.45); }
+.checkout__mail { margin-top: 0.25rem; }
+.checkout__panel label {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8a7f72;
+}
+.checkout__panel select {
+  width: 100%;
+  border: 1px solid rgba(42, 36, 28, 0.16);
+  background: #fff;
+  color: #2a241c;
+  padding: 0.75rem 0.8rem;
+  font: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.checkout__address {
+  margin-top: 0.85rem;
+  color: #2a241c !important;
+}
+.checkout__summary { padding: 1.25rem; }
+.checkout__lines { list-style: none; display: grid; gap: 0.9rem; margin: 1rem 0; }
+.checkout__line {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.8rem;
+}
+.checkout__line figure {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: #ebe4d8;
+  overflow: hidden;
+}
+.checkout__line img { object-fit: cover; }
+.checkout__line h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.15;
+}
+.checkout__line p { margin-top: 0.2rem; font-size: 0.88rem; }
+.checkout__total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(42, 36, 28, 0.1);
+  font-size: 0.95rem;
+}
+.checkout__total strong {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+.checkout__hold {
+  margin-top: 1rem;
+  padding: 0.9rem 0.95rem;
+  background: #f6f1e8;
+  color: #6e665c;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.checkout__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  margin-top: 0.9rem;
+  background: #741426;
+  color: #f7f2e9;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  border: 1px solid #741426;
+}
+.checkout__btn:disabled {
+  background: transparent;
+  color: #8a7f72;
+  border-color: rgba(42, 36, 28, 0.18);
+  cursor: not-allowed;
+}
+.checkout__back {
+  display: inline-block;
+  margin-top: 0.85rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(116, 20, 38, 0.45);
+}
+.checkout__gate {
+  max-width: 36rem;
+  padding-top: 1rem;
+}
+
+@media (min-width: 960px) {
+  .checkout__layout { grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr); }
+  .checkout__summary { position: sticky; top: calc(var(--nav-h) + 1rem); }
+}

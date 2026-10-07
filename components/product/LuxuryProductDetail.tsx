@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { addBagItem, parseInr } from "@/lib/bag";
+import { parseInr } from "@/lib/bag";
+import { beginIntent } from "@/lib/intent";
+import { isWished, removeWish } from "@/lib/wishlist";
 import "./luxury-detail.css";
 
 export type PdpCrumb = { href?: string; label: string };
@@ -32,7 +34,6 @@ type Props = {
   onColor?: (id: string) => void;
   accordions: PdpAccordion[];
   related: PdpRelated[];
-  rating?: { score: string; count: string };
 };
 
 export default function LuxuryProductDetail({
@@ -50,11 +51,28 @@ export default function LuxuryProductDetail({
   onColor,
   accordions,
   related,
-  rating = { score: "4.8", count: "120 reviews" },
 }: Props) {
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const wishId = `${productId ?? name}-${activeColorId || "default"}`;
+
+  useEffect(() => {
+    setSaved(isWished(wishId));
+  }, [wishId]);
+
+  const draft = () => {
+    const colour = colors.find((color) => color.id === activeColorId)?.label ?? "";
+    return {
+      id: wishId,
+      name,
+      detail: colour,
+      href: productHref ?? "/sarees",
+      image: images[0]?.src ?? "",
+      price: priceAmount ?? parseInr(price),
+    };
+  };
 
   useEffect(() => {
     setIndex(0);
@@ -141,11 +159,6 @@ export default function LuxuryProductDetail({
               <p className="pdp__price">{price}</p>
               <p className="pdp__tax">Inclusive of all taxes</p>
             </div>
-            <p className="pdp__rating">
-              <span aria-hidden="true">★★★★★</span>
-              <strong>{rating.score}</strong>
-              <em>({rating.count})</em>
-            </p>
           </div>
 
           <p className="pdp__desc">{description}</p>
@@ -183,27 +196,53 @@ export default function LuxuryProductDetail({
             })}
           </div>
 
+          <div className="pdp__links">
+            <Link href={`/your-saree?silk=${productId ?? ""}`}>Try in 3D</Link>
+            <Link href={`/your-saree?silk=${productId ?? ""}`}>Create your saree</Link>
+            <button
+              type="button"
+              onClick={() => {
+                if (saved) {
+                  setSaved(false);
+                  removeWish(wishId);
+                  flash(`${name} removed from your wishlist`);
+                  return;
+                }
+                const ran = beginIntent({
+                  type: "wishlist",
+                  next: "/wishlist",
+                  item: { ...draft(), code: productId ?? "" },
+                });
+                if (ran) {
+                  setSaved(true);
+                  flash(`${name} saved to your wishlist`);
+                }
+              }}
+            >
+              {saved ? "Saved" : "Save"}
+            </button>
+          </div>
+
           <div className="pdp__buy">
             <button
               type="button"
               className="pdp__btn pdp__btn--gold"
               onClick={() => {
-                const colour = colors.find((color) => color.id === activeColorId)?.label ?? "";
-                addBagItem({
-                  id: `${productId ?? name}-${activeColorId || "default"}`,
-                  name,
-                  detail: colour,
-                  href: productHref ?? "/sarees",
-                  image: images[0]?.src ?? "",
-                  price: priceAmount ?? parseInr(price),
-                });
-                flash(`${name} added to your bag`);
+                const ran = beginIntent({ type: "add-bag", next: "/bag", item: draft() });
+                if (ran) flash(`${name} added to your bag`);
               }}
             >
               <BagIcon />
-              Add to Cart
+              Add to Bag
             </button>
-            <button type="button" className="pdp__btn pdp__btn--line" onClick={() => flash(`Checkout started for ${name}`)}>
+            <button
+              type="button"
+              className="pdp__btn pdp__btn--line"
+              onClick={() => {
+                const ran = beginIntent({ type: "buy-now", next: "/checkout", item: draft() });
+                if (ran) window.location.assign("/checkout");
+              }}
+            >
               Buy Now
             </button>
           </div>

@@ -12,41 +12,36 @@ export default function Footer() {
         <div className="footer-ed__cols">
           <div>
             <p>Shop</p>
-            <Link href="#collection">Sarees</Link>
-            <Link href="#collection">New Arrivals</Link>
-            <Link href="#collection">Collections</Link>
-            <Link href="#categories">Bridal</Link>
-            <Link href="#collection">Gifting</Link>
+            <Link href="/sarees">All sarees</Link>
+            <Link href="/sarees?category=bridal">Bridal</Link>
+            <Link href="/collections">Collections</Link>
+            <Link href="/sarees?category=pastel">Everyday luxury</Link>
           </div>
           <div>
-            <p>Discover</p>
-            <Link href="#craft">Our Craft</Link>
+            <p>Atelier</p>
+            <Link href="/your-saree">Build your saree</Link>
+            <Link href="/wear">How to wear</Link>
+            <Link href="/care">Silk care</Link>
+          </div>
+          <div>
+            <p>House</p>
+            <Link href="/story">Our story</Link>
             <Link href="/heritage">Heritage</Link>
-            <Link href="#stories">Stories</Link>
-            <Link href="#silk">The Silk</Link>
-            <Link href="#craft">Zari</Link>
+            <Link href="/journal">Journal</Link>
+            <Link href="/account">Silk Vault</Link>
           </div>
           <div>
-            <p>Services</p>
-            <Link href="/your-saree">Personalize</Link>
-            <Link href="#finale">Care Guide</Link>
-            <Link href="#finale">Shipping</Link>
-            <Link href="#finale">Returns</Link>
-            <Link href="#finale">Contact</Link>
-          </div>
-          <div>
-            <p>Connect</p>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">YouTube</a>
+            <p>Account</p>
+            <Link href="/wishlist">Wishlist</Link>
+            <Link href="/bag">Bag</Link>
+            <Link href="/account?tab=orders">My orders</Link>
+            <Link href="/account?tab=creations">Saved creations</Link>
           </div>
         </div>
       </div>
       <div className="footer-ed__bottom">
         <span>© Mysore Silk</span>
-        <span>Privacy</span>
-        <span>Terms</span>
-        <span>Shipping</span>
+        <span>KSIC</span>
       </div>
     </footer>
   );

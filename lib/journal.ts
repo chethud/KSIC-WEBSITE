@@ -1,0 +1,100 @@
+/** Editorial chapters already told on the heritage journey. */
+export const JOURNAL = [
+  {
+    n: "01",
+    category: "Heritage",
+    title: "A Royal Beginning",
+    date: "1912",
+    summary: "Under the patronage of the Wadiyar dynasty, Mysore Silk began as a royal commission.",
+    image: "/heritage/01-wide.jpg?v=5",
+    href: "/heritage?chapter=1",
+    related: { href: "/sarees", label: "Discover the collection" },
+  },
+  {
+    n: "02",
+    category: "Craft",
+    title: "The Finest Silk",
+    date: "Selected",
+    summary: "Only long, continuous mulberry filaments are chosen for lustre and hand-feel.",
+    image: "/heritage/02.jpg?v=4",
+    href: "/heritage?chapter=2",
+    related: { href: "/sarees?category=pure-silk", label: "Shop pure silk" },
+  },
+  {
+    n: "03",
+    category: "Craft",
+    title: "Skilled Artisans",
+    date: "In Mysuru",
+    summary: "Master weavers set the tension and place the zari by hand.",
+    image: "/heritage/03.jpg?v=4",
+    href: "/heritage?chapter=3",
+    related: { href: "/story", label: "Read our story" },
+  },
+  {
+    n: "04",
+    category: "Silk Stories",
+    title: "A Distinctive Sheen",
+    date: "Signature",
+    summary: "The weave holds depth without heaviness, and the fabric catches gold in every fold.",
+    image: "/heritage/04.jpg?v=4",
+    href: "/heritage?chapter=4",
+    related: { href: "/sarees", label: "Discover the collection" },
+  },
+  {
+    n: "05",
+    category: "Heritage",
+    title: "Adorned by Royalty",
+    date: "Cherished",
+    summary: "From palace ceremonies to family milestones, the saree was kept as an heirloom.",
+    image: "/heritage/05.jpg?v=4",
+    href: "/heritage?chapter=5",
+    related: { href: "/collections", label: "Explore collections" },
+  },
+  {
+    n: "06",
+    category: "KSIC Stories",
+    title: "Recognised Worldwide",
+    date: "Beyond Mysuru",
+    summary: "Collectors seek the same purity of silk and precision of zari that defined the royal atelier.",
+    image: "/heritage/06.jpg?v=3",
+    href: "/heritage?chapter=6",
+    related: { href: "/collections", label: "Explore collections" },
+  },
+  {
+    n: "07",
+    category: "KSIC Stories",
+    title: "A Timeless Legacy",
+    date: "Today",
+    summary: "Woven for the present, made to be inherited.",
+    image: "/heritage/07.jpg?v=3",
+    href: "/heritage?chapter=7",
+    related: { href: "/your-saree", label: "Build your saree" },
+  },
+] as const;
+
+export const CARE_NOTES = [
+  {
+    title: "Washing",
+    body: "Dry clean only. Do not soak Mysore silk at home or use household detergent.",
+  },
+  {
+    title: "Drying",
+    body: "After a wearing, air the saree in shade. Keep it away from direct sun, which dulls both silk and zari.",
+  },
+  {
+    title: "Ironing",
+    body: "Iron on the reverse, on a low silk setting, with a cotton cloth between the iron and the zari.",
+  },
+  {
+    title: "Folding",
+    body: "Refold along fresh lines so the zari border does not crack in the same place.",
+  },
+  {
+    title: "Storage",
+    body: "Store folded in muslin, not plastic. Give the saree air before it returns to the wardrobe.",
+  },
+  {
+    title: "Zari care",
+    body: "Keep gold zari from moisture, perfume, and friction against jewellery.",
+  },
+] as const;
