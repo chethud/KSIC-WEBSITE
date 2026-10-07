@@ -79,7 +79,7 @@ export default function JournalPage() {
               </div>
               <div className="j-card__media">
                 <Image
-                  src="/journal/journal-loom.jpg"
+                  src="/journal/journal-loom.jpg?v=2"
                   alt="An artisan weaving maroon Mysore silk with gold zari on a handloom"
                   fill
                   priority

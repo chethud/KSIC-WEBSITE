@@ -67,7 +67,7 @@ export default function AuthDialog() {
         <p className="ux-kicker">Mysore Silk</p>
         <h2 id={titleId}>Sign in to continue</h2>
         <p className="auth__lead">
-          Browsing stays open. Your bag, wishlist, and saved saree need an account, and you will return to the same action.
+          Browsing stays open. Your wishlist and saved saree need an account, and you will return to the same action.
         </p>
         <form onSubmit={submit}>
           <label>

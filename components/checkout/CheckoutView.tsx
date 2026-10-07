@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { readAccount, type Account } from "@/lib/account";
 import { readAddresses, type Address } from "@/lib/addresses";
-import { bagTotal, bagUnits, formatInr, readBag, type BagItem } from "@/lib/bag";
-import { beginIntent } from "@/lib/intent";
+import { bagTotal, bagUnits, formatInr, readBag, removeBagItem, type BagItem } from "@/lib/bag";
 
 const STEPS = [
   ["01", "Contact"],
@@ -49,19 +48,6 @@ export default function CheckoutView() {
     );
   }
 
-  if (!account) {
-    return (
-      <div className="checkout__inner checkout__gate">
-        <p className="checkout__kicker">Checkout</p>
-        <h1>Sign in to continue</h1>
-        <p className="checkout__lead">There is no guest checkout. Your bag stays as it is, and you return here after signing in.</p>
-        <button type="button" className="checkout__btn" onClick={() => beginIntent({ type: "checkout", next: "/checkout" })}>
-          Sign in
-        </button>
-      </div>
-    );
-  }
-
   if (items.length === 0) {
     return (
       <div className="checkout__inner checkout__gate">
@@ -81,7 +67,7 @@ export default function CheckoutView() {
       <p className="checkout__kicker">Checkout</p>
       <h1>Review your silk</h1>
       <p className="checkout__lead">
-        Contact comes from your account. Payment is not connected, so this review cannot place an order.
+        Payment is not connected, so this review cannot place an order.
       </p>
       <ol className="checkout__steps">
         {STEPS.map(([index, label]) => (
@@ -97,8 +83,17 @@ export default function CheckoutView() {
           <section className="checkout__panel" aria-labelledby="checkout-contact">
             <p className="checkout__kicker">01</p>
             <h2 id="checkout-contact">Contact</h2>
-            <p className="checkout__address">{account.name}</p>
-            <p className="checkout__mail">{account.email}</p>
+            {account ? (
+              <>
+                <p className="checkout__address">{account.name}</p>
+                <p className="checkout__mail">{account.email}</p>
+              </>
+            ) : (
+              <>
+                <p className="checkout__address">Guest</p>
+                <p className="checkout__mail">Sign-in is not required for this preview.</p>
+              </>
+            )}
           </section>
 
           <section className="checkout__panel" aria-labelledby="checkout-address">
@@ -162,6 +157,9 @@ export default function CheckoutView() {
                   <h3><Link href={item.href}>{item.name}</Link></h3>
                   {item.detail ? <p>{item.detail}</p> : null}
                   <p>Qty {item.qty} · {formatInr(item.price * item.qty)}</p>
+                  <button type="button" className="checkout__remove" onClick={() => removeBagItem(item.id)}>
+                    Remove
+                  </button>
                 </div>
               </li>
             ))}

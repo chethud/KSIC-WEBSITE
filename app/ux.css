@@ -481,7 +481,7 @@ html.studio-active .dock { display: none; }
 }
 .home-gate__media img {
   object-fit: cover;
-  object-position: center 30%;
+  object-position: center 42%;
   transition: transform 800ms var(--ease);
 }
 .home-gate:hover .home-gate__media img { transform: scale(1.045); }

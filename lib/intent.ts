@@ -40,9 +40,11 @@ export function applyIntent(intent: Intent) {
   if (intent.type === "save-creation") window.dispatchEvent(new Event("ksic:resume-save"));
 }
 
+const guestActions = new Set<Intent["type"]>(["add-bag", "buy-now", "checkout"]);
+
 /** Returns true when the action ran now. Otherwise the sign-in dialog opens. */
 export function beginIntent(intent: Intent) {
-  if (!readAccount()) {
+  if (!readAccount() && !guestActions.has(intent.type)) {
     localStorage.setItem(KEY, JSON.stringify(intent));
     window.dispatchEvent(new Event("ksic:auth-needed"));
     return false;
