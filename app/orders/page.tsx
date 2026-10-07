@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import OrderHistory from "@/components/account/OrderHistory";
-import "../account/account.css";
+import "./orders.css";
 
 export const metadata: Metadata = {
   title: "Order history — Mysore Silk",
