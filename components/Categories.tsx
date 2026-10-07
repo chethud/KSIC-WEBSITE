@@ -8,6 +8,7 @@ const occasions = [
     image: "/cat-bridal.jpg",
     alt: "Bridal Mysore silk saree with gold zari",
     href: "/sarees?category=bridal",
+    face: true,
   },
   {
     title: "Ceremonial",
@@ -15,6 +16,7 @@ const occasions = [
     image: "/cat-sarees.jpg?v=2",
     alt: "Woman wearing a Mysore silk saree",
     href: "/sarees?category=temple",
+    face: true,
   },
   {
     title: "Everyday luxury",
@@ -29,7 +31,7 @@ export default function Categories() {
   return (
     <section className="categories" id="categories" aria-label="Shop by occasion">
       {occasions.map((cat) => (
-        <Link key={cat.title} className="cat" href={cat.href}>
+        <Link key={cat.title} className={cat.face ? "cat cat--face" : "cat"} href={cat.href}>
           <div className="media-fill">
             <Image src={cat.image} alt={cat.alt} fill sizes="(max-width: 900px) 100vw, 33vw" />
           </div>

@@ -691,6 +691,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: transform 1.25s var(--ease);
   transform: scale(1);
 }
+.cat--face .media-fill img {
+  object-position: center top;
+  transform-origin: center top;
+}
 .cat::after {
   content: "";
   position: absolute; inset: 0;
