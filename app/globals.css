@@ -1890,8 +1890,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   }
   .hero__stories { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
-  .art { grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); min-height: 88vh; }
-  .art__film { min-height: 100%; }
+  .art {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+    height: 540px;
+    min-height: 540px;
+  }
+  .art__film { min-height: 100%; height: 100%; }
   .art__panel { padding: clamp(2.2rem, 3vw, 3.2rem) clamp(1.35rem, 2.2vw, 2.4rem); }
   .art__panel .display { font-size: clamp(1.7rem, 2.2vw, 2.45rem); }
   .art__panel .body { max-width: none; }
