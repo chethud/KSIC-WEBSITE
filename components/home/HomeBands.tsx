@@ -129,28 +129,56 @@ export function StudioBand() {
   );
 }
 
+const closeGates = [
+  {
+    href: "/journal",
+    kicker: "Journal",
+    title: "Read the loom's story",
+    copy: "Heritage chapters, read on their own. A story never drops a saree into the bag.",
+    cta: "Read story",
+    image: "/journal/journal-loom.jpg",
+    alt: "An artisan weaving maroon Mysore silk with gold zari",
+  },
+  {
+    href: "/wear",
+    kicker: "How to wear",
+    title: "Learn the art of the saree",
+    copy: "The house drape, the length on the loom ticket, and what the studio can show.",
+    cta: "Read the guide",
+    image: "/journal/journal-wear.jpg",
+    alt: "A woman in an ivory Mysore silk saree with a gold zari border",
+  },
+  {
+    href: "/account",
+    kicker: "Silk Vault",
+    title: "Where a saree lives after you buy it",
+    copy: "Wishlist, saved creations, and — once an order can be completed — your wardrobe.",
+    cta: "Open my wardrobe",
+    image: "/journal/journal-vault.jpg",
+    alt: "A rosewood chest of folded Mysore silk sarees",
+  },
+] as const;
+
 export function CloseBand() {
   return (
-    <section className="home-band" aria-label="Journal and Silk Vault">
-      <div className="home-band__inner ux-grid ux-grid--3">
-        <Link href="/journal" className="ux-card">
-          <p className="ux-kicker">Journal</p>
-          <h2>Read the loom&apos;s story</h2>
-          <p>Heritage chapters, read on their own. A story never drops a saree into the bag.</p>
-          <span>Read story</span>
-        </Link>
-        <Link href="/wear" className="ux-card">
-          <p className="ux-kicker">How to wear</p>
-          <h2>Learn the art of the saree</h2>
-          <p>The house drape, the length on the loom ticket, and what the studio can show.</p>
-          <span>Read the guide</span>
-        </Link>
-        <Link href="/account" className="ux-card">
-          <p className="ux-kicker">Silk Vault</p>
-          <h2>Where a saree lives after you buy it</h2>
-          <p>Wishlist, saved creations, and — once an order can be completed — your wardrobe.</p>
-          <span>Open my wardrobe</span>
-        </Link>
+    <section className="home-band" aria-label="Journal, how to wear, and Silk Vault">
+      <div className="home-band__inner">
+        {closeGates.map((gate) => (
+          <Link key={gate.href} href={gate.href} className="home-gate">
+            <div className="home-gate__media">
+              <Image src={gate.image} alt={gate.alt} fill sizes="(max-width: 799px) 100vw, 33vw" />
+            </div>
+            <div className="home-gate__copy">
+              <em>{gate.kicker}</em>
+              <strong>{gate.title}</strong>
+              <p>{gate.copy}</p>
+              <span>
+                {gate.cta}
+                <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

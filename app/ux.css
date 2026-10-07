@@ -452,21 +452,88 @@ html.studio-active .dock { display: none; }
 .home-band {
   background: #f7f2e9;
   color: #14110e;
-  padding: clamp(3.5rem, 8vw, 6rem) var(--gutter);
+  padding: clamp(3.2rem, 7vw, 5.2rem) var(--gutter);
 }
-.home-band__inner { max-width: var(--max); margin: 0 auto; }
-.home-band .ux-card {
+.home-band__inner {
+  display: grid;
+  gap: 0.9rem;
+  max-width: var(--max);
+  margin: 0 auto;
+  grid-template-columns: 1fr;
+}
+.home-gate {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background: #fffdf8;
+  border: 1px solid rgba(120, 92, 52, 0.16);
+  border-radius: 8px;
+  color: inherit;
 }
-.home-band .ux-card span { margin-top: auto; padding-top: 1.1rem; }
-.home-band h2 {
+.home-gate__media {
+  position: relative;
+  display: block;
+  height: 210px;
+  flex: none;
+  overflow: hidden;
+  background: #e7dfd2;
+}
+.home-gate__media img {
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform 800ms var(--ease);
+}
+.home-gate:hover .home-gate__media img { transform: scale(1.045); }
+.home-gate__copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.15rem 1.2rem 1.25rem;
+}
+.home-gate em {
+  font-style: normal;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #a68446;
+}
+.home-gate strong {
+  display: block;
+  margin: 0.4rem 0 0.45rem;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-size: clamp(1.55rem, 2vw, 1.9rem);
   line-height: 1.05;
+  letter-spacing: -0.02em;
   max-width: 16ch;
+}
+.home-gate p {
+  color: #6e665c;
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.55;
+}
+.home-gate__copy > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: auto;
+  padding-top: 1.15rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #741426;
+}
+.home-gate__copy > span span { transition: transform 450ms var(--ease); }
+.home-gate:hover .home-gate__copy > span span { transform: translateX(4px); }
+@media (min-width: 800px) {
+  .home-band__inner { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .home-gate__media { height: 188px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-gate__media img,
+  .home-gate__copy > span span { transition: none; }
 }
 .pdp__links { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; margin-bottom: 0.9rem; }
 .pdp__links a,
