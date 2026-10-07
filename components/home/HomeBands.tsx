@@ -147,6 +147,7 @@ const closeGates = [
     cta: "Read the guide",
     image: "/journal/journal-wear.jpg",
     alt: "A woman in an ivory Mysore silk saree with a gold zari border",
+    face: true,
   },
   {
     href: "/account",
@@ -164,7 +165,7 @@ export function CloseBand() {
     <section className="home-band" aria-label="Journal, how to wear, and Silk Vault">
       <div className="home-band__inner">
         {closeGates.map((gate) => (
-          <Link key={gate.href} href={gate.href} className="home-gate">
+          <Link key={gate.href} href={gate.href} className={"face" in gate ? "home-gate home-gate--face" : "home-gate"}>
             <div className="home-gate__media">
               <Image src={gate.image} alt={gate.alt} fill sizes="(max-width: 799px) 100vw, 33vw" />
             </div>

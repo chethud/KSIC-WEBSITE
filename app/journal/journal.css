@@ -236,7 +236,10 @@
 .j-portrait:hover img,
 .j-note:hover img { transform: scale(1.025); }
 .j-card__media img { object-position: center 42%; }
-.j-card--wear .j-card__media img { object-position: center 18%; }
+.j-card--wear .j-card__media img {
+  object-position: center top;
+  transform-origin: center top;
+}
 .j-vault__media img { object-position: 42% center; }
 .j-vault__media::after {
   background:

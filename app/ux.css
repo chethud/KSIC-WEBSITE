@@ -484,6 +484,10 @@ html.studio-active .dock { display: none; }
   object-position: center 42%;
   transition: transform 800ms var(--ease);
 }
+.home-gate--face .home-gate__media img {
+  object-position: center top;
+  transform-origin: center top;
+}
 .home-gate:hover .home-gate__media img { transform: scale(1.045); }
 .home-gate__copy {
   display: flex;
