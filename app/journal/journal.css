@@ -232,9 +232,6 @@
   object-fit: cover;
   transition: transform 550ms var(--ease);
 }
-.j-card:hover .j-card__media img,
-.j-vault:hover .j-vault__media img,
-.j-split:hover .j-split__media img,
 .j-banner:hover img,
 .j-portrait:hover img,
 .j-note:hover img { transform: scale(1.025); }
