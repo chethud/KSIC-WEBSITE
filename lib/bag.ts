@@ -60,6 +60,11 @@ export function removeBagItem(id: string) {
   return next;
 }
 
+export function clearBag() {
+  writeBag([]);
+  return [];
+}
+
 export function bagUnits(items: BagItem[]) {
   return items.reduce((sum, item) => sum + item.qty, 0);
 }

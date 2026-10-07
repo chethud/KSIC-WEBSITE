@@ -5,24 +5,17 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { readAccount, type Account } from "@/lib/account";
 import { formatInr } from "@/lib/bag";
-
-const sampleOrder = {
-  id: "MS-1042",
-  name: "The Royal Blue",
-  detail: "Maharaja Collection",
-  placed: "12 March 2026",
-  status: "Completed",
-  price: 128000,
-  href: "/collection/royal-blue",
-  image: "/maharaja/royal-blue.jpg?v=1",
-};
+import { readOrders, type PlacedOrder } from "@/lib/orders";
 
 export default function OrderHistory() {
   const [account, setAccount] = useState<Account | null>(null);
+  const [orders, setOrders] = useState<PlacedOrder[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setAccount(readAccount());
+    const accountNow = readAccount();
+    setAccount(accountNow);
+    setOrders(accountNow ? readOrders(accountNow.email) : []);
     setReady(true);
   }, []);
 
@@ -42,24 +35,35 @@ export default function OrderHistory() {
         {account ? (
           <>
             <p className="acct__lead">Orders kept with {account.name}.</p>
-            <section className="acct__panel" aria-label="Orders">
-              <article className="acct__order">
-                <div className="acct__order-media">
-                  <Image src={sampleOrder.image} alt="" fill sizes="96px" />
-                </div>
-                <div>
-                  <p className="acct__kicker">
-                    {sampleOrder.id} · {sampleOrder.status}
-                  </p>
-                  <h2>{sampleOrder.name}</h2>
-                  <p className="acct__order-meta">
-                    {sampleOrder.detail} · Placed {sampleOrder.placed}
-                  </p>
-                </div>
-                <p className="acct__order-price">{formatInr(sampleOrder.price)}</p>
-                <Link href={sampleOrder.href}>View saree</Link>
-              </article>
-            </section>
+            {orders.length === 0 ? (
+              <p className="acct__lead">No orders yet. Place one from your bag.</p>
+            ) : (
+              <section className="acct__panel" aria-label="Orders">
+                {orders.map((order) => {
+                  const first = order.items[0];
+                  const extra = order.items.length - 1;
+                  return (
+                    <article key={order.id} className="acct__order">
+                      <div className="acct__order-media">
+                        {first?.image ? <Image src={first.image} alt="" fill sizes="96px" /> : null}
+                      </div>
+                      <div>
+                        <p className="acct__kicker">
+                          {order.id} · {order.status}
+                        </p>
+                        <h2>{first?.name}</h2>
+                        <p className="acct__order-meta">
+                          {extra > 0 ? `and ${extra} more · ` : ""}
+                          Placed {order.placed}
+                        </p>
+                      </div>
+                      <p className="acct__order-price">{formatInr(order.total)}</p>
+                      {first ? <Link href={first.href}>View saree</Link> : null}
+                    </article>
+                  );
+                })}
+              </section>
+            )}
           </>
         ) : (
           <>

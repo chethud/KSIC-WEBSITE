@@ -161,7 +161,7 @@ function renderConfigurationOnModel(controller: SareeMaterialController): void {
  * Edit-model mode paints UV region assignments (Border / Saree / …).
  */
 function HeroGlb({ url }: { url: string }) {
-  const { scene } = useGLTF(url, true);
+  const { scene } = useGLTF(url, false);
   const invalidate = useThree((s) => s.invalidate);
   const gl = useThree((s) => s.gl);
   const camera = useThree((s) => s.camera);
@@ -526,7 +526,7 @@ function HeroGlb({ url }: { url: string }) {
   return <primitive object={clone} position={[0, 0, 0]} scale={1} />;
 }
 
-useGLTF.preload(HERO_MODEL_PATH, true);
+useGLTF.preload(HERO_MODEL_PATH, false);
 
 export function HeroModel3D({
   hasHeroModel,

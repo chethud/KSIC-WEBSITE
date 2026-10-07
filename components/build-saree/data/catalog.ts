@@ -244,7 +244,7 @@ export const CAMERA_VIEWS: { id: import('../types/customization').CameraView; la
 export const MODEL_VIEWS = CAMERA_VIEWS;
 
 /** Same hero as “make your own saree”: public/models/saree-hero.glb */
-export const HERO_MODEL_PATH = '/models/saree-hero.glb?v=109';
+export const HERO_MODEL_PATH = '/models/saree-hero.glb?v=110';
 export const MASTER_SAREE_PATH = '/models/MASTER_SAREE.glb?v=109';
 export const MASTER_SAREE_OPTIMIZED_PATH = '/models/MASTER_SAREE_OPTIMIZED.glb?v=109';
 export const SAREE_FABRIC_MASK_PATH = '/models/saree_fabric_mask.png?v=107';

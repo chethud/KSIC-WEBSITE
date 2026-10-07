@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { readAccount, type Account } from "@/lib/account";
 import { readAddresses, type Address } from "@/lib/addresses";
 import { bagTotal, bagUnits, formatInr, readBag, removeBagItem, type BagItem } from "@/lib/bag";
+import { beginIntent } from "@/lib/intent";
 
 const STEPS = [
   ["01", "Contact"],
@@ -54,7 +55,7 @@ export default function CheckoutView() {
         <p className="checkout__kicker">Checkout</p>
         <h1>Your bag is empty</h1>
         <p className="checkout__lead">Add a saree before review. Nothing is held for delivery.</p>
-        <Link href="/sarees" className="checkout__btn">View sarees</Link>
+        <Link href="/sarees" className="checkout__checkout">View sarees</Link>
       </div>
     );
   }
@@ -64,48 +65,52 @@ export default function CheckoutView() {
 
   return (
     <div className="checkout__inner">
-      <p className="checkout__kicker">Checkout</p>
-      <h1>Review your silk</h1>
-      <p className="checkout__lead">
-        Payment is not connected, so this review cannot place an order.
-      </p>
-      <ol className="checkout__steps">
-        {STEPS.map(([index, label]) => (
-          <li key={index}>
-            {index}
-            <strong>{label}</strong>
-          </li>
-        ))}
-      </ol>
-
       <div className="checkout__layout">
-        <div>
+        <div className="checkout__main">
+          <header className="checkout__hero">
+            <p className="checkout__kicker">Checkout</p>
+            <h1>Review your silk</h1>
+            <p className="checkout__lead">
+              Sign in to place the order. It is kept with your account on this device.
+            </p>
+          </header>
+
+          <ol className="checkout__steps">
+            {STEPS.map(([index, label]) => (
+              <li key={index}>
+                <span>{index}</span>
+                {label}
+              </li>
+            ))}
+          </ol>
+
           <section className="checkout__panel" aria-labelledby="checkout-contact">
-            <p className="checkout__kicker">01</p>
-            <h2 id="checkout-contact">Contact</h2>
+            <p className="checkout__kicker">01 · Contact</p>
+            <h2 id="checkout-contact">{account ? account.name : "No account on this device"}</h2>
             {account ? (
-              <>
-                <p className="checkout__address">{account.name}</p>
-                <p className="checkout__mail">{account.email}</p>
-              </>
+              <p className="checkout__mail">{account.email}</p>
             ) : (
               <>
-                <p className="checkout__address">Guest</p>
-                <p className="checkout__mail">Sign-in is not required for this preview.</p>
+                <p>Sign in to place this order with your name.</p>
+                <button
+                  type="button"
+                  className="checkout__link"
+                  onClick={() => window.dispatchEvent(new Event("ksic:auth-needed"))}
+                >
+                  Sign in
+                </button>
               </>
             )}
           </section>
 
           <section className="checkout__panel" aria-labelledby="checkout-address">
-            <p className="checkout__kicker">02</p>
-            <h2 id="checkout-address">Address</h2>
+            <p className="checkout__kicker">02 · Address</p>
+            <h2 id="checkout-address">Delivery address</h2>
             {addresses.length === 0 ? (
-              <p>
-                No saved address.
-              </p>
+              <p>No saved address.</p>
             ) : (
               <label>
-                Delivery address
+                Saved addresses
                 <select value={addressId} onChange={(event) => setAddressId(event.target.value)}>
                   {addresses.map((item) => (
                     <option key={item.id} value={item.id}>
@@ -130,21 +135,20 @@ export default function CheckoutView() {
           </section>
 
           <section className="checkout__panel" aria-labelledby="checkout-delivery">
-            <p className="checkout__kicker">03</p>
-            <h2 id="checkout-delivery">Delivery</h2>
+            <p className="checkout__kicker">03 · Delivery</p>
+            <h2 id="checkout-delivery">Shipping</h2>
             <p>A shipping method is not connected. PIN serviceability is not checked, and no delivery date is promised.</p>
           </section>
 
           <section className="checkout__panel" aria-labelledby="checkout-payment" role="status">
-            <p className="checkout__kicker">04</p>
-            <h2 id="checkout-payment">Payment unavailable</h2>
-            <p>No UPI, card, net banking, or wallet is configured. An order will not be created, and this bag will not be cleared.</p>
+            <p className="checkout__kicker">04 · Payment</p>
+            <h2 id="checkout-payment">No card is taken here</h2>
+            <p>Place order records the sarees with your account. A payment gateway is not connected, so nothing is charged.</p>
           </section>
         </div>
 
         <aside className="checkout__summary" aria-label="Order summary">
-          <p className="checkout__kicker">Your silk · {units}</p>
-          <h2>{units === 1 ? "One piece" : `${units} pieces`}</h2>
+          <h2>Order Summary</h2>
           <ul className="checkout__lines">
             {items.map((item) => (
               <li key={item.id} className="checkout__line">
@@ -156,7 +160,7 @@ export default function CheckoutView() {
                 <div>
                   <h3><Link href={item.href}>{item.name}</Link></h3>
                   {item.detail ? <p>{item.detail}</p> : null}
-                  <p>Qty {item.qty} · {formatInr(item.price * item.qty)}</p>
+                  <p className="checkout__qty">Qty {item.qty} · {formatInr(item.price * item.qty)}</p>
                   <button type="button" className="checkout__remove" onClick={() => removeBagItem(item.id)}>
                     Remove
                   </button>
@@ -164,15 +168,36 @@ export default function CheckoutView() {
               </li>
             ))}
           </ul>
-          <p className="checkout__total">
+          <dl>
+            <div>
+              <dt>Subtotal</dt>
+              <dd>{formatInr(bagTotal(items))}</dd>
+            </div>
+            <div>
+              <dt>Shipping</dt>
+              <dd>Complimentary in India</dd>
+            </div>
+          </dl>
+          <div className="checkout__total">
             <span>Total</span>
-            <strong>{formatInr(bagTotal(items))}</strong>
-          </p>
-          <p className="checkout__hold">Taxes and shipping are not calculated until checkout can take payment.</p>
-          <button type="button" className="checkout__btn" disabled>
+            <div>
+              <strong>{formatInr(bagTotal(items))}</strong>
+              <small>{units} {units === 1 ? "piece" : "pieces"}</small>
+            </div>
+          </div>
+          <p className="checkout__hold">The total is the silk in your bag. Nothing is charged on this page.</p>
+          <button
+            type="button"
+            className="checkout__checkout"
+            onClick={() => {
+              const ran = beginIntent({ type: "place-order", next: "/orders" });
+              if (ran) window.location.assign("/orders");
+            }}
+          >
             Place order
           </button>
-          <Link href="/bag" className="checkout__back">Return to bag</Link>
+          <p className="checkout__or">or</p>
+          <Link href="/bag" className="checkout__continue">Return to bag</Link>
         </aside>
       </div>
     </div>

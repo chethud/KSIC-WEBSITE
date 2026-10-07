@@ -132,6 +132,11 @@
   }
   .acct__order a { justify-self: end; }
 }
+.acct__order + .acct__order {
+  margin-top: 1.15rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(36, 29, 24, 0.08);
+}
 .acct__panel h2,
 .acct__vault-card h2 {
   margin-top: 0.45rem;
