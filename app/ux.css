@@ -166,7 +166,7 @@ html.studio-active .dock { display: none; }
   text-transform: uppercase;
 }
 .ux-tabs .is-current { background: #14110e; color: #f7f2e9; }
-.hero__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.1rem; margin-top: 0.4rem; }
+.hero__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem 0.9rem; margin-top: 0.15rem; }
 .hero__quiet {
   font-size: 0.66rem;
   letter-spacing: 0.18em;

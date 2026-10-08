@@ -88,11 +88,6 @@ export default function Hero() {
           <span>Silk</span>
         </h1>
         <p className="hero__lead">Made to be inherited.</p>
-        <p className="hero__body">
-          Woven in Mysuru. Cherished today.
-          <br />
-          Passed to tomorrow.
-        </p>
         <div className="hero__ctas">
           <Link className="btn btn--outline" href="/sarees">
             Explore silk <span aria-hidden="true">→</span>

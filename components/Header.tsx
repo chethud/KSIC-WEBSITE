@@ -1,41 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useId, useRef, useState } from "react";
 import { readAccount, type Account } from "@/lib/account";
 import { bagUnits, readBag } from "@/lib/bag";
+import { SITE_NAV, navGroupActive, type NavCurrent } from "@/lib/site-nav";
 import Emblem from "./Emblem";
 import SearchPanel from "./site/SearchPanel";
 
 type HeaderProps = {
   variant?: "home" | "atelier" | "heritage";
-  current?: "shop" | "collections" | "experience" | "story" | "journal" | "sarees" | "your-saree" | "heritage";
+  current?: NavCurrent;
 };
 
-const links = [
-  { href: "/sarees", label: "Shop", key: "shop" },
-  { href: "/collections", label: "Collections", key: "collections" },
-  { href: "/your-saree", label: "Build Your Saree", key: "your-saree" },
-  { href: "/heritage", label: "Our Story", key: "heritage" },
-  { href: "/journal", label: "Journal", key: "journal" },
-] as const;
-
-function currentKey(current?: HeaderProps["current"]) {
-  if (current === "sarees") return "shop";
-  if (current === "experience") return "your-saree";
-  if (current === "story") return "heritage";
-  return current;
-}
-
 export default function Header({ variant = "home", current }: HeaderProps) {
+  const pathname = usePathname() || "/";
   const [scrolled, setScrolled] = useState(variant !== "home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [bagCount, setBagCount] = useState(0);
   const [account, setAccount] = useState<Account | null>(null);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [drawerGroup, setDrawerGroup] = useState<string | null>(null);
   const accountRef = useRef<HTMLDivElement>(null);
-  const active = currentKey(current);
+  const linksRef = useRef<HTMLElement>(null);
+  const navId = useId();
+  const activeGroup = navGroupActive(current, pathname);
 
   useEffect(() => {
     const syncBag = () => setBagCount(bagUnits(readBag()));
@@ -69,6 +61,26 @@ export default function Header({ variant = "home", current }: HeaderProps) {
   }, [accountOpen]);
 
   useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenGroup(null);
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    if (!openGroup) return;
+    const onPointer = (event: MouseEvent) => {
+      if (!linksRef.current?.contains(event.target as Node)) setOpenGroup(null);
+    };
+    document.addEventListener("mousedown", onPointer);
+    return () => document.removeEventListener("mousedown", onPointer);
+  }, [openGroup]);
+
+  useEffect(() => {
     if (variant !== "home") {
       setScrolled(true);
       return;
@@ -78,6 +90,12 @@ export default function Header({ variant = "home", current }: HeaderProps) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [variant]);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setOpenGroup(null);
+    setDrawerGroup(null);
+  }, [pathname]);
 
   const variantClass =
     variant === "atelier" ? " nav--atelier" : variant === "heritage" ? " nav--heritage" : "";
@@ -89,12 +107,58 @@ export default function Header({ variant = "home", current }: HeaderProps) {
           <Emblem />
         </Link>
 
-        <nav className="nav__links" aria-label="Primary">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href} className={link.key === active ? "is-current" : undefined}>
-              {link.label}
-            </Link>
-          ))}
+        <nav className="nav__links" aria-label="Primary" ref={linksRef}>
+          {SITE_NAV.map((group) => {
+            const hasChildren = Boolean(group.children?.length);
+            const isOpen = openGroup === group.id;
+            const isCurrent = activeGroup === group.id;
+            const panelId = `${navId}-${group.id}`;
+
+            if (!hasChildren) {
+              return (
+                <Link
+                  key={group.id}
+                  href={group.href || "/"}
+                  className={isCurrent ? "is-current" : undefined}
+                  onMouseEnter={() => setOpenGroup(null)}
+                >
+                  {group.label}
+                </Link>
+              );
+            }
+
+            return (
+              <div
+                key={group.id}
+                className={`nav__item${isOpen ? " is-open" : ""}${isCurrent ? " is-current" : ""}`}
+                onMouseEnter={() => setOpenGroup(group.id)}
+                onMouseLeave={() => setOpenGroup((current) => (current === group.id ? null : current))}
+                onFocusCapture={() => setOpenGroup(group.id)}
+                onBlurCapture={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                    setOpenGroup((current) => (current === group.id ? null : current));
+                  }
+                }}
+              >
+                <button
+                  type="button"
+                  className="nav__trigger"
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  onClick={() => setOpenGroup(isOpen ? null : group.id)}
+                >
+                  {group.label}
+                </button>
+                <div id={panelId} className="nav__panel" hidden={!isOpen}>
+                  {group.children?.map((child) => (
+                    <Link key={child.href + child.label} href={child.href} onClick={() => setOpenGroup(null)}>
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </nav>
 
         <div className="nav__actions">
@@ -159,14 +223,49 @@ export default function Header({ variant = "home", current }: HeaderProps) {
 
       {menuOpen ? (
         <div className="drawer">
-          <nav aria-label="Mobile">
-            {links.map((link) => (
-              <Link key={`m-${link.href}`} href={link.href} onClick={() => setMenuOpen(false)}>
-                {link.label}
-              </Link>
-            ))}
-            <Link href="/wishlist" onClick={() => setMenuOpen(false)}>Wishlist</Link>
-            <Link href={account ? "/account" : "/account"} onClick={() => setMenuOpen(false)}>
+          <nav className="drawer__nav" aria-label="Mobile">
+            {SITE_NAV.map((group) => {
+              const hasChildren = Boolean(group.children?.length);
+              if (!hasChildren) {
+                return (
+                  <Link key={`m-${group.id}`} href={group.href || "/"} onClick={() => setMenuOpen(false)}>
+                    {group.label}
+                  </Link>
+                );
+              }
+
+              const expanded = drawerGroup === group.id;
+              return (
+                <div key={`m-${group.id}`} className={`drawer__group${expanded ? " is-open" : ""}`}>
+                  <button
+                    type="button"
+                    className="drawer__trigger"
+                    aria-expanded={expanded}
+                    onClick={() => setDrawerGroup(expanded ? null : group.id)}
+                  >
+                    <span>{group.label}</span>
+                    <span aria-hidden="true">{expanded ? "−" : "+"}</span>
+                  </button>
+                  {expanded ? (
+                    <div className="drawer__panel">
+                      {group.children?.map((child) => (
+                        <Link
+                          key={`m-${child.href}-${child.label}`}
+                          href={child.href}
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+            <Link href="/wishlist" onClick={() => setMenuOpen(false)}>
+              Wishlist
+            </Link>
+            <Link href="/account" onClick={() => setMenuOpen(false)}>
               {account ? "Silk Vault" : "Login"}
             </Link>
           </nav>
@@ -180,7 +279,9 @@ export default function Header({ variant = "home", current }: HeaderProps) {
         {account ? (
           <Link href="/wishlist">Wishlist</Link>
         ) : (
-          <button type="button" onClick={() => setSearchOpen(true)}>Search</button>
+          <button type="button" onClick={() => setSearchOpen(true)}>
+            Search
+          </button>
         )}
         <Link href="/account">{account ? "Vault" : "Account"}</Link>
       </nav>
