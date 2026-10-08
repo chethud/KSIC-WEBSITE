@@ -8,6 +8,8 @@ import { bagUnits, readBag } from "@/lib/bag";
 import { SITE_NAV, navGroupActive, type NavCurrent } from "@/lib/site-nav";
 import Emblem from "./Emblem";
 import SearchPanel from "./site/SearchPanel";
+import GroupMegaMenu from "./site/GroupMegaMenu";
+import ShopMegaMenu from "./site/ShopMegaMenu";
 
 type HeaderProps = {
   variant?: "home" | "atelier" | "heritage";
@@ -25,9 +27,32 @@ export default function Header({ variant = "home", current }: HeaderProps) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [drawerGroup, setDrawerGroup] = useState<string | null>(null);
   const accountRef = useRef<HTMLDivElement>(null);
-  const linksRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navId = useId();
   const activeGroup = navGroupActive(current, pathname);
+  const shopHighlighted = openGroup === "shop" || activeGroup === "shop";
+  const openNavGroup = SITE_NAV.find((group) => group.id === openGroup);
+
+  const cancelCloseMenu = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const openMenu = (id: string) => {
+    cancelCloseMenu();
+    setOpenGroup(id);
+  };
+
+  const scheduleCloseMenu = () => {
+    cancelCloseMenu();
+    closeTimerRef.current = setTimeout(() => {
+      setOpenGroup(null);
+      closeTimerRef.current = null;
+    }, 220);
+  };
 
   useEffect(() => {
     const syncBag = () => setBagCount(bagUnits(readBag()));
@@ -74,11 +99,15 @@ export default function Header({ variant = "home", current }: HeaderProps) {
   useEffect(() => {
     if (!openGroup) return;
     const onPointer = (event: MouseEvent) => {
-      if (!linksRef.current?.contains(event.target as Node)) setOpenGroup(null);
+      if (!headerRef.current?.contains(event.target as Node)) setOpenGroup(null);
     };
     document.addEventListener("mousedown", onPointer);
     return () => document.removeEventListener("mousedown", onPointer);
   }, [openGroup]);
+
+  useEffect(() => {
+    return () => cancelCloseMenu();
+  }, []);
 
   useEffect(() => {
     if (variant !== "home") {
@@ -97,21 +126,33 @@ export default function Header({ variant = "home", current }: HeaderProps) {
     setDrawerGroup(null);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   const variantClass =
     variant === "atelier" ? " nav--atelier" : variant === "heritage" ? " nav--heritage" : "";
 
   return (
     <>
-      <header className={`nav${scrolled ? " is-scrolled" : ""}${variantClass}`}>
+      <header
+        ref={headerRef}
+        className={`nav nav--luxury${scrolled ? " is-scrolled" : ""}${openGroup ? " is-menu-open" : ""}${variantClass}`}
+        onMouseEnter={cancelCloseMenu}
+        onMouseLeave={scheduleCloseMenu}
+      >
         <Link href="/" className="nav__brand" aria-label="Mysore Silk home">
           <Emblem />
         </Link>
 
-        <nav className="nav__links" aria-label="Primary" ref={linksRef}>
+        <nav className="nav__links" aria-label="Primary">
           {SITE_NAV.map((group) => {
             const hasChildren = Boolean(group.children?.length);
             const isOpen = openGroup === group.id;
-            const isCurrent = activeGroup === group.id;
+            const isCurrent = activeGroup === group.id || (group.id === "shop" && shopHighlighted);
             const panelId = `${navId}-${group.id}`;
 
             if (!hasChildren) {
@@ -120,7 +161,10 @@ export default function Header({ variant = "home", current }: HeaderProps) {
                   key={group.id}
                   href={group.href || "/"}
                   className={isCurrent ? "is-current" : undefined}
-                  onMouseEnter={() => setOpenGroup(null)}
+                  onMouseEnter={() => {
+                    cancelCloseMenu();
+                    setOpenGroup(null);
+                  }}
                 >
                   {group.label}
                 </Link>
@@ -131,50 +175,55 @@ export default function Header({ variant = "home", current }: HeaderProps) {
               <div
                 key={group.id}
                 className={`nav__item${isOpen ? " is-open" : ""}${isCurrent ? " is-current" : ""}`}
-                onMouseEnter={() => setOpenGroup(group.id)}
-                onMouseLeave={() => setOpenGroup((current) => (current === group.id ? null : current))}
-                onFocusCapture={() => setOpenGroup(group.id)}
-                onBlurCapture={(event) => {
-                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                    setOpenGroup((current) => (current === group.id ? null : current));
-                  }
-                }}
+                onMouseEnter={() => openMenu(group.id)}
+                onFocusCapture={() => openMenu(group.id)}
               >
                 <button
                   type="button"
                   className="nav__trigger"
                   aria-expanded={isOpen}
                   aria-controls={panelId}
-                  onClick={() => setOpenGroup(isOpen ? null : group.id)}
+                  onClick={() => (isOpen ? scheduleCloseMenu() : openMenu(group.id))}
                 >
                   {group.label}
                 </button>
-                <div id={panelId} className="nav__panel" hidden={!isOpen}>
-                  {group.children?.map((child) => (
-                    <Link key={child.href + child.label} href={child.href} onClick={() => setOpenGroup(null)}>
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
               </div>
             );
           })}
         </nav>
 
+        {openNavGroup?.children?.length ? (
+          <div
+            id={`${navId}-${openNavGroup.id}`}
+            className={`nav__mega${openNavGroup.id === "shop" ? "" : " nav__mega--group"} is-open`}
+            onMouseEnter={cancelCloseMenu}
+          >
+            {openNavGroup.id === "shop" ? (
+              <ShopMegaMenu onNavigate={() => setOpenGroup(null)} />
+            ) : (
+              <GroupMegaMenu
+                groupId={openNavGroup.id}
+                links={openNavGroup.children}
+                onNavigate={() => setOpenGroup(null)}
+              />
+            )}
+          </div>
+        ) : null}
+
         <div className="nav__actions">
           <button type="button" className="icon-btn" aria-label="Search" onClick={() => setSearchOpen(true)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35">
               <circle cx="11" cy="11" r="6.5" />
               <path d="M16 16.5 20 20.5" />
             </svg>
           </button>
           <Link href="/wishlist" className="icon-btn nav__desk" aria-label="Wishlist">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35">
               <path d="M12 19s-6.2-3.7-6.2-8A3.4 3.4 0 0 1 12 8.2 3.4 3.4 0 0 1 18.2 11C18.2 15.3 12 19 12 19Z" />
             </svg>
           </Link>
           <Link href="/bag" className="icon-btn" aria-label={bagCount ? `Bag, ${bagCount} items` : "Bag"}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35">
               <path d="M6.5 7.5h11l-.9 11.2H7.4L6.5 7.5z" />
               <path d="M9 7.5V6.4a3 3 0 0 1 6 0v1.1" />
             </svg>
@@ -189,7 +238,7 @@ export default function Header({ variant = "home", current }: HeaderProps) {
               aria-expanded={accountOpen}
               onClick={() => setAccountOpen((open) => !open)}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35">
                 <circle cx="12" cy="8" r="3.2" />
                 <path d="M5.5 19c1.4-3.2 3.8-4.7 6.5-4.7s5.1 1.5 6.5 4.7" />
               </svg>
@@ -222,7 +271,7 @@ export default function Header({ variant = "home", current }: HeaderProps) {
       </header>
 
       {menuOpen ? (
-        <div className="drawer">
+        <div className="drawer drawer--luxury">
           <nav className="drawer__nav" aria-label="Mobile">
             {SITE_NAV.map((group) => {
               const hasChildren = Boolean(group.children?.length);
@@ -235,8 +284,13 @@ export default function Header({ variant = "home", current }: HeaderProps) {
               }
 
               const expanded = drawerGroup === group.id;
+              const isShop = group.id === "shop";
+
               return (
-                <div key={`m-${group.id}`} className={`drawer__group${expanded ? " is-open" : ""}`}>
+                <div
+                  key={`m-${group.id}`}
+                  className={`drawer__group${expanded ? " is-open" : ""}${isShop ? " drawer__group--shop" : ""}`}
+                >
                   <button
                     type="button"
                     className="drawer__trigger"
@@ -247,16 +301,16 @@ export default function Header({ variant = "home", current }: HeaderProps) {
                     <span aria-hidden="true">{expanded ? "−" : "+"}</span>
                   </button>
                   {expanded ? (
-                    <div className="drawer__panel">
-                      {group.children?.map((child) => (
-                        <Link
-                          key={`m-${child.href}-${child.label}`}
-                          href={child.href}
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
+                    <div className="drawer__mega">
+                      {isShop ? (
+                        <ShopMegaMenu onNavigate={() => setMenuOpen(false)} />
+                      ) : (
+                        <GroupMegaMenu
+                          groupId={group.id}
+                          links={group.children || []}
+                          onNavigate={() => setMenuOpen(false)}
+                        />
+                      )}
                     </div>
                   ) : null}
                 </div>
