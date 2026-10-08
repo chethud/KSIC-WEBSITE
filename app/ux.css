@@ -539,6 +539,100 @@ html.studio-active .dock { display: none; }
   .home-gate__media img,
   .home-gate__copy > span span { transition: none; }
 }
+
+.voices {
+  position: relative;
+  color: #241d18;
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(198, 166, 107, 0.12) 0%, transparent 42%),
+    radial-gradient(ellipse at 88% 100%, rgba(116, 20, 38, 0.05) 0%, transparent 40%),
+    #f7f3eb;
+  padding: clamp(2.2rem, 4vw, 3.2rem) var(--gutter);
+}
+.voices__inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  text-align: center;
+}
+.voices__head {
+  margin-bottom: clamp(1.4rem, 2.5vw, 2rem);
+}
+.voices__kicker {
+  margin-bottom: 0.4rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #a68446;
+}
+.voices__head h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.55rem, 2.6vw, 2.15rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #1c1814;
+}
+.voices__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.85rem, 1.8vw, 1.25rem);
+  text-align: left;
+}
+.voices__quote {
+  height: 100%;
+  margin: 0;
+  padding: clamp(1.1rem, 2vw, 1.45rem);
+  background: #fffdf8;
+  border: 1px solid rgba(120, 92, 52, 0.14);
+  box-shadow: 0 10px 28px rgba(48, 32, 16, 0.05);
+}
+.voices__stars {
+  display: flex;
+  gap: 0.22rem;
+  margin-bottom: 0.7rem;
+}
+.voices__stars span {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: #c6a66b;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.voices__quote p {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.35vw, 1.12rem);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: #2a241e;
+  margin: 0;
+}
+.voices__quote footer {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: 1rem;
+}
+.voices__quote strong {
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #741426;
+}
+.voices__quote span {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: #8a8176;
+}
+@media (max-width: 900px) {
+  .voices__grid {
+    grid-template-columns: 1fr;
+    max-width: 28rem;
+    margin: 0 auto;
+  }
+}
 .pdp__links { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; margin-bottom: 0.9rem; }
 .pdp__links a,
 .pdp__links button {

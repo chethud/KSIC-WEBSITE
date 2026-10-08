@@ -3,33 +3,33 @@ import Link from "next/link";
 
 const occasions = [
   {
-    title: "Bridal",
-    copy: "Sarees marked\nfor the wedding day.",
-    image: "/cat-bridal.jpg",
-    alt: "Bridal Mysore silk saree with gold zari",
-    href: "/sarees?category=bridal",
-    face: true,
-  },
-  {
-    title: "Ceremonial",
-    copy: "Temple borders\nfor ceremony.",
+    title: "Sarees",
+    copy: "Mysore silk,\nwoven for every occasion.",
     image: "/cat-sarees.jpg?v=2",
     alt: "Woman wearing a Mysore silk saree",
-    href: "/sarees?category=temple",
+    href: "/sarees",
     face: true,
   },
   {
-    title: "Everyday luxury",
-    copy: "Quieter colour,\nsame loom.",
-    image: "/gold-thread.jpg",
-    alt: "Gold zari on Mysore silk",
-    href: "/sarees?category=pastel",
+    title: "Men's",
+    copy: "Silk shirts, kurtas,\nand ties from the house.",
+    image: "/cat-mens.jpg",
+    alt: "Man in a maroon Mysore silk kurta with gold zari",
+    href: "/collections/mens",
+    face: true,
+  },
+  {
+    title: "Gifts",
+    copy: "Silk to give,\nand to keep.",
+    image: "/journal/journal-vault.jpg",
+    alt: "A rosewood chest of folded Mysore silk sarees",
+    href: "/collections/gifts",
   },
 ];
 
 export default function Categories() {
   return (
-    <section className="categories" id="categories" aria-label="Shop by occasion">
+    <section className="categories" id="categories" aria-label="Shop by collection">
       {occasions.map((cat) => (
         <Link key={cat.title} className={cat.face ? "cat cat--face" : "cat"} href={cat.href}>
           <div className="media-fill">

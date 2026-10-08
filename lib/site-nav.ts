@@ -11,7 +11,6 @@ export type NavGroup = {
 };
 
 export const SITE_NAV: NavGroup[] = [
-  { id: "home", label: "Home", href: "/" },
   {
     id: "mysore-silk",
     label: "Mysore Silk",
