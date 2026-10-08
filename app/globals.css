@@ -481,17 +481,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-radius: 6px;
   box-shadow: 0 22px 48px rgba(40, 28, 16, 0.14);
   overflow: hidden;
-  min-height: 16rem;
+  min-height: 0;
   text-align: left;
 }
 .group-mega__intro {
-  padding: 1.25rem 1rem 1.35rem;
+  padding: 1rem 1rem 1.1rem;
   border-right: 1px solid rgba(120, 92, 52, 0.12);
   display: flex;
   flex-direction: column;
 }
 .group-mega__intro.is-detail {
-  padding-bottom: 1.25rem;
+  padding-bottom: 1rem;
 }
 .group-mega__links {
   list-style: none;
@@ -513,7 +513,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-radius: 6px;
   box-shadow: 0 22px 48px rgba(40, 28, 16, 0.14);
   overflow: hidden;
-  min-height: 20rem;
+  min-height: 0;
 }
 .shop-mega__col {
   padding: 1.25rem 1rem 1.35rem;
@@ -528,13 +528,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   animation: shop-intro-in 220ms var(--ease) both;
 }
 .shop-mega__col--intro.is-detail {
-  padding-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  gap: 0;
 }
 .shop-mega__preview {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  margin: 0 0 1.15rem;
+  aspect-ratio: 16 / 9;
+  margin: 0 0 0.7rem;
   overflow: hidden;
   background: #ebe4d8;
 }
@@ -543,23 +544,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   object-position: center 20%;
 }
 .shop-mega__label {
-  margin: 0 0 1rem;
+  margin: 0 0 0.4rem;
   font-size: 0.62rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #a68446;
   font-weight: 500;
 }
+.shop-mega__col--intro.is-detail .shop-mega__label {
+  margin-bottom: 0.3rem;
+}
 .shop-mega__title {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.85rem, 2.4vw, 2.45rem);
-  line-height: 1.08;
+  font-size: clamp(1.35rem, 1.8vw, 1.7rem);
+  line-height: 1.15;
   letter-spacing: -0.02em;
   color: #1c1814;
+  white-space: nowrap;
 }
-.shop-mega__title span { display: block; }
 .shop-mega__desc {
   margin: 1rem 0 0;
   max-width: 16rem;
@@ -575,26 +579,24 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (prefers-reduced-motion: reduce) {
   .shop-mega__col--intro { animation: none; }
 }
-.shop-mega__rule {
-  width: 2.75rem;
-  height: 1px;
-  margin: 1.35rem 0 1.25rem;
-  background: linear-gradient(90deg, #a68446, rgba(166, 132, 70, 0.2));
-}
 .shop-mega__cta {
+  margin-top: 0.65rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.45rem;
   align-self: flex-start;
-  padding: 0.72rem 1.25rem;
+  padding: 0.55rem 1rem;
   border-radius: 999px;
   background: #741426;
   color: #fbf8f1;
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
   transition: background 280ms var(--ease), transform 280ms var(--ease);
+}
+.shop-mega__col--intro.is-detail .shop-mega__cta {
+  margin-top: 0.55rem;
 }
 .shop-mega__cta:hover {
   background: #5c101e;

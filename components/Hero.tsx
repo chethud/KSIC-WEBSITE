@@ -35,7 +35,7 @@ export default function Hero() {
               poster="/hero-bg.png"
               aria-label="Mysore silk in motion"
             >
-              <source src="/hero-home.mp4?v=30s" type="video/mp4" />
+              <source src="/hero-home.mp4?v=8bfeca5e" type="video/mp4" />
             </video>
           </div>
         </div>

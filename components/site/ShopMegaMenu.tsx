@@ -33,15 +33,6 @@ function PalaceSketch() {
   );
 }
 
-function splitTitle(title: string) {
-  const parts = title.trim().split(/\s+/);
-  if (parts.length <= 1) return { lead: "", end: title };
-  return {
-    lead: parts.slice(0, -1).join(" "),
-    end: parts[parts.length - 1],
-  };
-}
-
 export default function ShopMegaMenu({ onNavigate }: ShopMegaMenuProps) {
   const { intro, featured } = SHOP_MEGA;
   const [activeHref, setActiveHref] = useState<string | null>(null);
@@ -62,8 +53,6 @@ export default function ShopMegaMenu({ onNavigate }: ShopMegaMenuProps) {
         ctaHref: intro.ctaHref,
         image: intro.image,
       };
-
-  const { lead, end } = splitTitle(panel.title);
 
   return (
     <div
@@ -88,17 +77,7 @@ export default function ShopMegaMenu({ onNavigate }: ShopMegaMenuProps) {
           </div>
         ) : null}
         <p className="shop-mega__label">{panel.label}</p>
-        <h3 className="shop-mega__title">
-          {lead ? (
-            <>
-              <span>{lead}</span>
-              <span>{end}</span>
-            </>
-          ) : (
-            <span>{panel.title}</span>
-          )}
-        </h3>
-        <div className="shop-mega__rule" aria-hidden="true" />
+        <h3 className="shop-mega__title">{panel.title}</h3>
         <Link href={panel.ctaHref} className="shop-mega__cta" onClick={onNavigate}>
           {panel.ctaLabel} <span aria-hidden="true">→</span>
         </Link>
