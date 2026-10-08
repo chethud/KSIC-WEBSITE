@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import BetweenHero from "@/components/home/BetweenHero";
 import Categories from "@/components/Categories";
 import MaharajaCollection from "@/components/MaharajaCollection";
 import Heritage from "@/components/Heritage";
@@ -13,6 +14,7 @@ export default function HomePage() {
       <Header />
       <main id="top">
         <Hero />
+        <BetweenHero />
         <Categories />
         <MaharajaCollection />
         <Heritage />
